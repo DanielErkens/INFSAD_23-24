@@ -17,9 +17,61 @@ public enum CardKind
     Creature
 }
 
+public enum EffectType
+{
+    IncreaseAttack,
+    IncreaseDefense,
+    // Add more effect types as needed
+}
+
+public enum Target
+{
+    Self,
+    Other,
+    // Add more targets as needed
+}
+
+public class Effect
+{
+    public EffectType Type { get; set; }
+    public Target Target { get; set; }
+    public int Duration { get; set; }
+    public int Value { get; set; }
+    
+    public bool IsActive { get; private set; }
+    private int remainingDuration;
+
+    public Effect(EffectType type, Target target, int duration, int value)
+    {
+        Type = type;
+        Target = target;
+        Duration = duration;
+        Value = value;
+        IsActive = true;
+        remainingDuration = duration;
+    }
+
+    // Method to apply the effect to the game state
+    public void ApplyEffect(GameState gameState)
+    {
+        // Apply the effect to the game state
+        // Logic to modify the game state based on the effect type and target
+
+        // Decrement remaining duration
+        remainingDuration--;
+
+        // Check if the effect duration has expired
+        if (remainingDuration <= 0)
+        {
+            IsActive = false; // Deactivate the effect if its duration has expired
+        }
+    }
+}
+
 public interface ICardEffect
 {
     void ApplyEffect(GameState gameState);
+    Effect GetEffect();
 }
 
 public interface ICardState
@@ -36,16 +88,9 @@ public abstract class Card
 
     public ICardState CardState { get; protected set; }
 
-    protected Card(string name, CardColor color, CardKind kind, int copies)
-    {
-        Name = name;
-        Color = color;
-        Kind = kind;
-        Copies = copies;
-        CardState = new DeactivatedState();
-    }
+    public abstract void ApplyEffect(GameState gameState);
 
-    public abstract void Activate(Player owner, GameState gameState);
+    public abstract Effect GetEffect();
 }
 
 public class LandCard : Card
@@ -83,9 +128,19 @@ public class SpellCard : Card
         }
         else
         {
-            // Create a permanent card from the spell card
             var permanentCard = new CreatureCard(Name, Color, 0, 0, Effects);
             owner.AddPermanentCard(permanentCard);
+
+            // Apply effects with durations to the game state
+            foreach (var effect in Effects)
+            {
+                if (effect.Duration > 1)
+                {
+                    // Clone the effect and decrement its duration
+                    var clonedEffect = new Effect(effect.Type, effect.Target, effect.Duration - 1, effect.Value);
+                    gameState.AddEffect(clonedEffect);
+                }
+            }
         }
     }
 }
