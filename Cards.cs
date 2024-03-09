@@ -1,61 +1,56 @@
 using System.Collections.Generic;
 
-// Enum representing different colors of cards
 public enum CardColor
 {
     Red,
     Blue,
     Brown,
     White,
-    Green
+    Green,
+    Colorless
 }
 
-// Enum representing different types of cards
-public enum CardType
+public enum CardKind
 {
     Land,
     Spell,
-    Creature,
-    Instantaneous
+    Creature
 }
 
-// Interface for card effects
 public interface ICardEffect
 {
     void ApplyEffect(GameState gameState);
 }
 
-// Interface for card states
 public interface ICardState
 {
     void ApplyEffect(GameState gameState);
 }
 
-// Base class for all cards
 public abstract class Card
 {
     public string Name { get; protected set; }
     public CardColor Color { get; protected set; }
-    public CardType Type { get; protected set; }
+    public CardKind Kind { get; protected set; }
+    public int Copies { get; protected set; }
 
     public ICardState CardState { get; protected set; }
 
-    protected Card(string name, CardColor color, CardType type)
+    protected Card(string name, CardColor color, CardKind kind, int copies)
     {
         Name = name;
         Color = color;
-        Type = type;
-        CardState = new DeactivatedState(); // Initialize with a default state
+        Kind = kind;
+        Copies = copies;
+        CardState = new DeactivatedState();
     }
 
-    // Abstract method for activating the card
     public abstract void Activate(Player owner, GameState gameState);
 }
 
-// Class for land cards
 public class LandCard : Card
 {
-    public LandCard(string name, CardColor color) : base(name, color, CardType.Land) { }
+    public LandCard(string name, CardColor color) : base(name, color, CardKind.Land, 3) { }
 
     public override void Activate(Player owner, GameState gameState)
     {
@@ -63,36 +58,45 @@ public class LandCard : Card
     }
 }
 
-// Class for spell cards
 public class SpellCard : Card
 {
     public int Cost { get; protected set; }
     public List<ICardEffect> Effects { get; protected set; }
+    public bool IsInstantaneous { get; protected set; }
 
-    public SpellCard(string name, CardColor color, int cost, List<ICardEffect> effects) : base(name, color, CardType.Spell)
+    public SpellCard(string name, CardColor color, int cost, List<ICardEffect> effects, bool isInstantaneous) : base(name, color, CardKind.Spell, 3)
     {
         Cost = cost;
         Effects = effects;
+        IsInstantaneous = isInstantaneous;
     }
 
     public override void Activate(Player owner, GameState gameState)
     {
-        // Apply effects of the spell card
-        foreach (var effect in Effects)
+        if (IsInstantaneous)
         {
-            effect.ApplyEffect(gameState);
+            // Apply effects of the instantaneous spell card
+            foreach (var effect in Effects)
+            {
+                effect.ApplyEffect(gameState);
+            }
+        }
+        else
+        {
+            // Create a permanent card from the spell card
+            var permanentCard = new CreatureCard(Name, Color, 0, 0, Effects);
+            owner.AddPermanentCard(permanentCard);
         }
     }
 }
 
-// Class for creature cards
 public class CreatureCard : Card
 {
     public int Attack { get; protected set; }
     public int Defense { get; protected set; }
     public List<ICardEffect> Effects { get; protected set; }
 
-    public CreatureCard(string name, CardColor color, int attack, int defense, List<ICardEffect> effects) : base(name, color, CardType.Creature)
+    public CreatureCard(string name, CardColor color, int attack, int defense, List<ICardEffect> effects) : base(name, color, CardKind.Creature, 3)
     {
         Attack = attack;
         Defense = defense;
@@ -109,16 +113,13 @@ public class CreatureCard : Card
     }
 }
 
-// Class for instantaneous spell cards
 public class InstantaneousSpellCard : SpellCard
 {
-    public InstantaneousSpellCard(string name, CardColor color, int cost, List<ICardEffect> effects) : base(name, color, cost, effects)
+    public InstantaneousSpellCard(string name, CardColor color, int cost, List<ICardEffect> effects) : base(name, color, cost, effects, true)
     {
-        Type = CardType.Instantaneous;
     }
 }
 
-// Concrete class representing the activated state of a card
 public class ActivatedState : ICardState
 {
     public void ApplyEffect(GameState gameState)
@@ -127,7 +128,6 @@ public class ActivatedState : ICardState
     }
 }
 
-// Concrete class representing the deactivated state of a card
 public class DeactivatedState : ICardState
 {
     public void ApplyEffect(GameState gameState)
@@ -136,7 +136,6 @@ public class DeactivatedState : ICardState
     }
 }
 
-// Concrete class representing the discarded state of a card
 public class DiscardedState : ICardState
 {
     public void ApplyEffect(GameState gameState)
@@ -145,7 +144,6 @@ public class DiscardedState : ICardState
     }
 }
 
-// Concrete class representing the effect of a card being played
 public class PlayedState : ICardState
 {
     public void ApplyEffect(GameState gameState)
@@ -154,3 +152,31 @@ public class PlayedState : ICardState
     }
 }
 
+public class Player
+{
+    public List<Card> Deck { get; set; }
+    public List<Card> Hand { get; set; }
+    public List<Card> Graveyard { get; set; }
+    public List<Card> Permanents { get; set; }
+
+    public Player()
+    {
+        Deck = new List<Card>();
+        Hand = new List<Card>();
+        Graveyard = new List<Card>();
+        Permanents = new List<Card>();
+    }
+
+    public void AddPermanentCard(Card card)
+    {
+        if (Permanents.Count < 3)
+        {
+            Permanents.Add(card);
+        }
+    }
+}
+
+public class GameState
+{
+    // Game state implementation
+}
