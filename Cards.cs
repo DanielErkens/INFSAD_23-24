@@ -95,13 +95,35 @@ public abstract class Card
 
 public class LandCard : Card
 {
-    public LandCard(string name, CardColor color) : base(name, color, CardKind.Land, 3) { }
+    public bool IsTurned { get; private set; }
+
+    public LandCard(string name, CardColor color) : base(name, color, CardKind.Land, 3)
+    {
+        IsTurned = false;
+    }
 
     public override void Activate(Player owner, GameState gameState)
     {
         // Lands have no activation effect
     }
+
+    public void TurnLand(Player owner, GameState gameState)
+    {
+        // Check if it's the owner's turn and the land hasn't been turned yet
+        if (owner.IsTurn && !IsTurned)
+        {
+            // Mark the land as turned
+            IsTurned = true;
+
+            // Obtain energy of the appropriate color
+            owner.ObtainEnergy(Color);
+
+            // Prevent the land from being reused until the next beginning of the owner's turn
+            owner.AddUsedLand(this);
+        }
+    }
 }
+
 
 public class SpellCard : Card
 {
@@ -213,6 +235,7 @@ public class Player
     public List<Card> Hand { get; set; }
     public List<Card> Graveyard { get; set; }
     public List<Card> Permanents { get; set; }
+    public List<LandCard> UsedLands { get; set; } // Track lands that have been turned
 
     public Player()
     {
@@ -220,6 +243,7 @@ public class Player
         Hand = new List<Card>();
         Graveyard = new List<Card>();
         Permanents = new List<Card>();
+        UsedLands = new List<LandCard>();
     }
 
     public void AddPermanentCard(Card card)
@@ -229,7 +253,38 @@ public class Player
             Permanents.Add(card);
         }
     }
+
+    public void ObtainEnergy(CardColor color)
+    {
+        // Add energy of the appropriate color to the player's energy reserve
+        // Implementation depends on your game's energy management system
+    }
+
+    public void AddUsedLand(LandCard land)
+    {
+        UsedLands.Add(land);
+    }
+
+    public bool IsTurn
+    {
+        get
+        {
+            // Check if it's the player's turn
+            // Implementation depends on your game's turn management system
+        }
+    }
+
+    public void ResetTurn()
+    {
+        // Reset the state of lands at the beginning of the turn
+        foreach (var land in UsedLands)
+        {
+            land.IsTurned = false;
+        }
+        UsedLands.Clear();
+    }
 }
+
 
 public class GameState
 {
