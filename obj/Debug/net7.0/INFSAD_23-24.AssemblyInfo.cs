@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("INFSAD_23-24")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3613be08a610360b00b3b1d3781b16568877921d")]
 [assembly: System.Reflection.AssemblyProductAttribute("INFSAD_23-24")]
 [assembly: System.Reflection.AssemblyTitleAttribute("INFSAD_23-24")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

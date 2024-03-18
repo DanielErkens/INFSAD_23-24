@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Files\\Analyse\\INFSAD_23-24\\INFSAD_23-24.csproj": {}
+    "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\INFSAD_23-24.csproj": {}
   },
   "projects": {
-    "c:\\Files\\Analyse\\INFSAD_23-24\\INFSAD_23-24.csproj": {
+    "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\INFSAD_23-24.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Files\\Analyse\\INFSAD_23-24\\INFSAD_23-24.csproj",
+        "projectUniqueName": "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\INFSAD_23-24.csproj",
         "projectName": "INFSAD_23-24",
-        "projectPath": "c:\\Files\\Analyse\\INFSAD_23-24\\INFSAD_23-24.csproj",
-        "packagesPath": "C:\\Users\\dcerk\\.nuget\\packages\\",
-        "outputPath": "c:\\Files\\Analyse\\INFSAD_23-24\\obj\\",
+        "projectPath": "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\INFSAD_23-24.csproj",
+        "packagesPath": "C:\\Users\\Moesab\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\dcerk\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Moesab\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -50,12 +53,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[7.0.16, 7.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[7.0.16, 7.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[7.0.16, 7.0.16]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[7.0.16, 7.0.16]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

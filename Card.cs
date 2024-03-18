@@ -1,5 +1,39 @@
 using System.Collections.Generic;
 
+
+public class CardFactory {
+
+    private static CardFactory instance;
+
+    private CardFactory()
+    {
+    }
+
+    public static CardFactory Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = new CardFactory();
+            return instance;
+        }
+    }
+
+    public Card createCard(Player owner, string type, CardColor color, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects, int cost = 0, int attack = 0, int defence = 0) {
+        switch(type.ToLower()) {
+            case "land":
+                return new LandCard(owner, color.ToString() + "_" + type.ToLower(), color, cardType, activationEffect, effects);
+            case "spell":
+                return new SpellCard(owner, color.ToString() + "_" + type.ToLower(), color, cardType, activationEffect, effects, cost);
+            case "creature":
+                return new CreatureCard(owner, color.ToString() + "_" + type.ToLower(), color, cardType, activationEffect, effects, cost, attack, defence);
+            default:
+            //  Throw an exception
+                throw new ArgumentException("Unknown card type: " + type);
+        }
+    }
+}
+
 public enum CardColor
 {
     Red,
@@ -17,6 +51,7 @@ public enum CardType
 
 public abstract class Card
 {
+    public Player owner { get; private set; }
     public string Name { get; set; }
     public CardColor CardColor { get; set; }
     public CardState CardState { get; set; }
@@ -25,14 +60,15 @@ public abstract class Card
     public CardEffect[] Effects { get; set; }
     public CardType CardType { get; set; }
 
-    protected Card(string name, CardColor cardColor, CardState cardState, GameState gameState, CardEffect activationEffect, CardEffect[] effects, CardType cardType)
+    protected Card(Player owner, string name, CardColor cardColor, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects)
     {
+        owner = owner;
         Name = name;
         CardColor = cardColor;
-        CardState = cardState;
-        GameState = gameState;
+        CardState = new NotPlayedState(this);
+        GameState = GameState.getInstance();
         ActivationEffect = activationEffect;
-        Effects = effects;
+        Effects = effects ?? new CardEffect[0];
         CardType = cardType;
     }
     public abstract void activate();
@@ -40,12 +76,18 @@ public abstract class Card
 
 public class LandCard : Card
 {
-    public LandCard(string name, CardColor cardColor, CardState cardState, GameState gameState, CardEffect activationEffect, CardEffect[] effects, CardType cardType) : base(name, cardColor, cardState, gameState, activationEffect, effects, cardType)
+    public bool turned { get; set; }
+
+    public LandCard(Player owner, string name, CardColor cardColor, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects) : base(owner, name, cardColor, cardType, activationEffect, effects)
     {}
 
     public override void activate()
     {
         // Change turned state here
+    }
+
+    public void reset() {
+        this.CardState.reset();
     }
 }
 
@@ -53,7 +95,7 @@ public class LandCard : Card
 public class SpellCard : Card
 {
     public int Cost { get; protected set; }
-    public SpellCard(string name, CardColor cardColor, CardState cardState, GameState gameState, CardEffect activationEffect, CardEffect[] effects, CardType cardType, int cost) : base(name, cardColor, cardState, gameState, activationEffect, effects, cardType) 
+    public SpellCard(Player owner, string name, CardColor cardColor, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects, int cost) : base(owner, name, cardColor, cardType, activationEffect, effects) 
     {
         Cost = cost;
     }
@@ -70,7 +112,7 @@ public class CreatureCard : Card
     public int Defense { get; protected set; }
     public int Cost { get; protected set; }
 
-    public CreatureCard(string name, CardColor cardColor, CardState cardState, GameState gameState, CardEffect activationEffect, CardEffect[] effects, CardType cardType, int attack, int defense, int cost) : base(name, cardColor, cardState, gameState, activationEffect, effects, cardType)
+    public CreatureCard(Player owner, string name, CardColor cardColor, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects, int cost, int attack, int defense) : base(owner, name, cardColor, cardType, activationEffect, effects)
     {
         Attack = attack;
         Defense = defense;

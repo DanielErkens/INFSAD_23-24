@@ -78,4 +78,11 @@ public class Player
             GameState = GameState.getInstance();
         }
     }
+
+    public void trimCards() {
+        if (this.Deck.Count > 7)
+        {
+            this.Deck.RemoveRange(7, this.Deck.Count - 7);
+        }
+    }
 }
