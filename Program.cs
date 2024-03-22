@@ -54,10 +54,9 @@ public class Program {
     }
 
     public static void Main(String[] args) {
-        // init_board();
-        // init_decks();
-        // play_turns();
-        Console.WriteLine("Hello, World!");
+        init_board();
+        init_decks();
+        play_turns();
 
         //Use turnState states to play the turns
         // gameState.TurnState.PlayPhase();
