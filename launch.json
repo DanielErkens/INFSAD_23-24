@@ -9,7 +9,7 @@
         // Request type. Possible values: "launch", "attach", "testRequest".
         "request": "launch",
         // The program to be executed. Change this to the path of your compiled executable.
-        "program": "${workspaceFolder}/bin/Debug/net7.0/INFSAD_23-24.dll",
+        "program": "${workspaceFolder}/Program.cs",
         // Optional: The args to pass to the program. Adjust as needed.
         "args": [],
         // Optional: The working directory for the program. Adjust as needed.

@@ -1,13 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4FYk/W/fKa8OtkkCtR9FCFnmbCbJAxVMU9smkYJd229t68cevWNxghkj1A4HxXDkxQJYqRzYvHlmcZNVALrKVg==",
+  "dgSpecHash": "qdx+tbaNzaSyLR6PTAUFrxloqldAFfaZBbriKqJ4myDlCxXxhjdNKcVGk5zOODYZZxVhl2edCy854i+oyEX6qg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\INFSAD_23-24.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\Moesab\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.16\\microsoft.netcore.app.ref.7.0.16.nupkg.sha512",
-    "C:\\Users\\Moesab\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.16\\microsoft.windowsdesktop.app.ref.7.0.16.nupkg.sha512",
-    "C:\\Users\\Moesab\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.16\\microsoft.aspnetcore.app.ref.7.0.16.nupkg.sha512",
-    "C:\\Users\\Moesab\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.16\\microsoft.netcore.app.host.win-x64.7.0.16.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

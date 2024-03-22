@@ -2,7 +2,6 @@ C:\Users\Moesab\Documents\Hogeschool Rotterdam jaar 3\ANL7\Practicum\Card game\I
 C:\Users\Moesab\Documents\Hogeschool Rotterdam jaar 3\ANL7\Practicum\Card game\INFSAD_23-24\obj\Debug\net7.0\INFSAD_23-24.AssemblyInfoInputs.cache
 C:\Users\Moesab\Documents\Hogeschool Rotterdam jaar 3\ANL7\Practicum\Card game\INFSAD_23-24\obj\Debug\net7.0\INFSAD_23-24.AssemblyInfo.cs
 C:\Users\Moesab\Documents\Hogeschool Rotterdam jaar 3\ANL7\Practicum\Card game\INFSAD_23-24\obj\Debug\net7.0\INFSAD_23-24.csproj.CoreCompileInputs.cache
-C:\Users\Moesab\Documents\Hogeschool Rotterdam jaar 3\ANL7\Practicum\Card game\INFSAD_23-24\obj\Debug\net7.0\INFSAD_23-24.sourcelink.json
 C:\Users\Moesab\Documents\Hogeschool Rotterdam jaar 3\ANL7\Practicum\Card game\INFSAD_23-24\bin\Debug\net7.0\INFSAD_23-24.exe
 C:\Users\Moesab\Documents\Hogeschool Rotterdam jaar 3\ANL7\Practicum\Card game\INFSAD_23-24\bin\Debug\net7.0\INFSAD_23-24.deps.json
 C:\Users\Moesab\Documents\Hogeschool Rotterdam jaar 3\ANL7\Practicum\Card game\INFSAD_23-24\bin\Debug\net7.0\INFSAD_23-24.runtimeconfig.json
