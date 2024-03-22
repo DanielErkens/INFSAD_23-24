@@ -19,14 +19,14 @@ public class CardFactory {
         }
     }
 
-    public Card createCard(Player owner, CardPlaceHolder type, CardColor color, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects, int cost = 0, int attack = 0, int defence = 0) {
+    public Card createCard(Player owner, CardPlaceHolder type, CardColor color, CardEffect? activationEffect, CardEffect[]? effects, CardType cardType = CardType.Instantaneous, int cost = 0, int attack = 0, int defence = 0) {
         switch(type) {
             case CardPlaceHolder.land:
-                return new LandCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects);
+                return new LandCard(owner, color.ToString() + "_" + type.ToString(), color, CardType.Permanent, activationEffect, effects);
             case CardPlaceHolder.spell:
                 return new SpellCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects, cost);
             case CardPlaceHolder.creature:
-                return new CreatureCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects, cost, attack, defence);
+                return new CreatureCard(owner, color.ToString() + "_" + type.ToString(), color, CardType.Permanent, activationEffect, effects, cost, attack, defence);
             default:
             //  Throw an exception
                 throw new ArgumentException("Unknown card type: " + type);

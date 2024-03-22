@@ -1,6 +1,7 @@
 ﻿using System;
 
 public class Program {
+
     public static void init_board() {
         GameState gameState = GameState.getInstance();
 
@@ -13,33 +14,50 @@ public class Program {
         GameState gameState = GameState.getInstance();
         // Arnold
 
+        // Deck
+        for (int i=0; i<30; i++) {
+            gameState.Player1.Deck.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.White, null, null, cost: 1));
+        }
+
         // 2 Blue lands
-        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Blue, CardType.Permanent, null, null));
-        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Blue, CardType.Permanent, null, null));
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Blue, null, null));
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Blue, null, null));
 
         // 1 green land
-        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Green, CardType.Permanent, null, null));
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Green, null, null));
 
         // 1 blue creature
-        Card temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.creature, CardColor.Blue, CardType.Permanent, null, null, 2, 2, 2);
+        Card temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.creature, CardColor.Blue, null, null, cost: 2, attack: 2, defence: 2);
         temp.ActivationEffect = new CreatureEffect(gameState.CurrentTurn, temp, false, 0, Target.Other);
         gameState.Player1.Hand.Add(temp);
 
         // 1 green spell
-        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Green, CardType.Instantaneous, null, null, 1));
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Green, null, null, cost: 1));
 
         // 1 blue instant counter
-        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Blue, CardType.Instantaneous, null, null, 1));
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Blue, null, null, cost: 1));
+
+        // Filler cards
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.White, null, null, cost: 1));
 
 
 
         // Bryce
+
+        // Deck
+        for (int i=0; i<30; i++) {
+            gameState.Player2.Deck.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.White, null, null, cost: 1));
+        }
+
         // 1 red land
-        gameState.Player2.Hand.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.Red, CardType.Permanent, null, null));
+        gameState.Player2.Hand.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.Red, null, null));
 
         // 1 red instant counter
-        gameState.Player2.Hand.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.spell, CardColor.Red, CardType.Instantaneous, null, null, 1));
+        gameState.Player2.Hand.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.spell, CardColor.Red, null, null, cost: 1));
 
+        for (int i=0; i<6; i++) {
+            gameState.Player2.Hand.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.White, null, null, cost: 1));
+        }
     }
 
     public static void play_turns() {
@@ -76,6 +94,7 @@ public class Program {
 
     public static void Main(String[] args) {
         init_board();
+        // starting state
         init_decks();
         play_turns();
 
