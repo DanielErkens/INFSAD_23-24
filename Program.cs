@@ -11,14 +11,35 @@ public class Program {
 
     public static void init_decks() {
         GameState gameState = GameState.getInstance();
-        gameState.Player1.Deck.Add(CardFactory.Instance.createCard(gameState.Player1, "land", CardColor.Blue, CardType.Permanent, null, null));
-        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, "land", CardColor.Blue, CardType.Permanent, null, null));
-        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, "land", CardColor.Green, CardType.Permanent, null, null));
-        // Player1.Permanents.Add();
+        // Arnold
 
-        gameState.Player2.Deck.Add(CardFactory.Instance.createCard(gameState.Player2, "land", CardColor.Red, CardType.Permanent, null, null));
-        // Player2.Hand.Add();
-        // Player2.Permanents.Add();
+        // 2 Blue lands
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Blue, CardType.Permanent, null, null));
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Blue, CardType.Permanent, null, null));
+
+        // 1 green land
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Green, CardType.Permanent, null, null));
+
+        // 1 blue creature
+        Card temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.creature, CardColor.Blue, CardType.Permanent, null, null, 2, 2, 2);
+        temp.ActivationEffect = new CreatureEffect(gameState.CurrentTurn, temp, false, 0, Target.Other);
+        gameState.Player1.Hand.Add(temp);
+
+        // 1 green spell
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Green, CardType.Instantaneous, null, null, 1));
+
+        // 1 blue instant counter
+        gameState.Player1.Hand.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Blue, CardType.Instantaneous, null, null, 1));
+
+
+
+        // Bryce
+        // 1 red land
+        gameState.Player2.Hand.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.Red, CardType.Permanent, null, null));
+
+        // 1 red instant counter
+        gameState.Player2.Hand.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.spell, CardColor.Red, CardType.Instantaneous, null, null, 1));
+
     }
 
     public static void play_turns() {

@@ -4,46 +4,49 @@ public interface ITurnState { //Implement here state design pattern and Composit
 }
 
 public class PreparationState : ITurnState {
-    public GameState GameState;
+
     public PreparationState() {
-        GameState = GameState.getInstance();
     }
 
     public void PlayPhase() {
         System.Console.WriteLine("inside prep phase");
 
         // reset lands
-        foreach(Card card in GameState.Player1.Permanents) {
+        foreach(Card card in GameState.getInstance().Player1.Permanents) {
             if (card is LandCard) {
                 ((LandCard)card).turned = false;
             }
         }
 
-        foreach(Card card in GameState.Player2.Permanents) {
+        foreach(Card card in GameState.getInstance().Player2.Permanents) {
             if (card is LandCard) {
                 ((LandCard)card).turned = false;
             }
         }
+
+        UpdateCardEffectIsActive();
     
-        GameState.TurnState = new DrawingState();
+        GameState.getInstance().TurnState = new DrawingState();
 
     }
 
-    public void UpdateCardEffectIsActive() {}
+    public void UpdateCardEffectIsActive() {
+        // effects into play
+    }
 
 
 }
 
 public class DrawingState : ITurnState {
-    public GameState GameState;
     public DrawingState() {
-        GameState = GameState.getInstance();
     }
 
     public void PlayPhase() {
         System.Console.WriteLine("inside drawing phase");
         
-        GameState.TurnState = GameState.Players[(GameState.CurrentTurn % 2)].Deck.Count <= 0 ? new GameOverState() : new MainState();
+        UpdateCardEffectIsActive();
+
+        GameState.getInstance().TurnState = GameState.getInstance().Players[(GameState.getInstance().CurrentTurn % 2)].Deck.Count <= 0 ? new GameOverState() : new MainState();
 
     }
 
@@ -53,15 +56,15 @@ public class DrawingState : ITurnState {
 }
 
 public class MainState : ITurnState { //Implement pub-sub here
-    public GameState GameState;
     public MainState() {
-        GameState = GameState.getInstance();
     }
 
     public void PlayPhase() {
         System.Console.WriteLine("inside main phase");
 
-        GameState.TurnState = new EndingState();
+        UpdateCardEffectIsActive();
+
+        GameState.getInstance().TurnState = new EndingState();
 
     }
 
@@ -70,20 +73,21 @@ public class MainState : ITurnState { //Implement pub-sub here
 }
 
 public class EndingState : ITurnState {
-    public GameState GameState;
+
     public EndingState() {
-        GameState = GameState.getInstance();
     }
 
     public void PlayPhase() {
         System.Console.WriteLine("inside ending phase");
-        if (GameState.Player1.Hand.Count > 7)
-            GameState.Player1.trimCards();
+        if (GameState.getInstance().Player1.Hand.Count > 7)
+            GameState.getInstance().Player1.trimCards();
 
-        if(GameState.Player2.Hand.Count > 7)  
-            GameState.Player2.trimCards();
+        if(GameState.getInstance().Player2.Hand.Count > 7)  
+            GameState.getInstance().Player2.trimCards();
 
-        GameState.TurnState = new PreparationState();
+        UpdateCardEffectIsActive();
+        
+        GameState.getInstance().TurnState = new PreparationState();
     }
 
     public void UpdateCardEffectIsActive() {}
@@ -93,9 +97,8 @@ public class EndingState : ITurnState {
 }
 
 public class GameOverState : ITurnState {
-    public GameState GameState;
+
     public GameOverState() {
-        GameState = GameState.getInstance();
     }
     
     public void PlayPhase() {

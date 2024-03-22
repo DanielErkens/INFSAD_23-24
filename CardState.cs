@@ -11,6 +11,9 @@ public abstract class CardState
     public virtual void applyEffect() { Console.WriteLine("Unable to applyEffect"); }
     public virtual void reset() { Console.WriteLine("Unable to reset"); }
     public virtual void playCard() { Console.WriteLine("Unable to play card"); }
+    public virtual Boolean isInPlay() { return false; }
+
+
 }
 
 public class ActivatedState : CardState {
@@ -25,6 +28,7 @@ public class ActivatedState : CardState {
     public override void reset() {
         System.Console.WriteLine("Resetting");
     }
+
 }
 
 public class DeactivatedState : CardState {
@@ -66,6 +70,10 @@ public class PlayedState : CardState {
 
     public override void reset() {
         System.Console.WriteLine("Resetting");
+    }
+
+    public override bool isInPlay() {
+        return true;
     }
 }
 

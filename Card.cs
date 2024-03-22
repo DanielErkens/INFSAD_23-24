@@ -19,19 +19,25 @@ public class CardFactory {
         }
     }
 
-    public Card createCard(Player owner, string type, CardColor color, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects, int cost = 0, int attack = 0, int defence = 0) {
-        switch(type.ToLower()) {
-            case "land":
-                return new LandCard(owner, color.ToString() + "_" + type.ToLower(), color, cardType, activationEffect, effects);
-            case "spell":
-                return new SpellCard(owner, color.ToString() + "_" + type.ToLower(), color, cardType, activationEffect, effects, cost);
-            case "creature":
-                return new CreatureCard(owner, color.ToString() + "_" + type.ToLower(), color, cardType, activationEffect, effects, cost, attack, defence);
+    public Card createCard(Player owner, CardPlaceHolder type, CardColor color, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects, int cost = 0, int attack = 0, int defence = 0) {
+        switch(type) {
+            case CardPlaceHolder.land:
+                return new LandCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects);
+            case CardPlaceHolder.spell:
+                return new SpellCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects, cost);
+            case CardPlaceHolder.creature:
+                return new CreatureCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects, cost, attack, defence);
             default:
             //  Throw an exception
                 throw new ArgumentException("Unknown card type: " + type);
         }
     }
+}
+
+public enum CardPlaceHolder {
+    land,
+    spell,
+    creature
 }
 
 public enum CardColor
@@ -51,7 +57,7 @@ public enum CardType
 
 public abstract class Card
 {
-    public Player owner { get; private set; }
+    public Player Owner { get; private set; }
     public string Name { get; set; }
     public CardColor CardColor { get; set; }
     public CardState CardState { get; set; }
@@ -62,7 +68,7 @@ public abstract class Card
 
     protected Card(Player owner, string name, CardColor cardColor, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects)
     {
-        owner = owner;
+        Owner = owner;
         Name = name;
         CardColor = cardColor;
         CardState = new NotPlayedState(this);
