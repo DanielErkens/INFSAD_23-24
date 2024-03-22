@@ -129,6 +129,14 @@ public class CreatureCard : Card
     {
         // Apply effects of the creature card
     }
+
+    public void increaseAttack(int buff) {
+        this.Attack += buff;
+    }
+
+    public void increaseDefense(int buff) {
+        this.Defense += buff;
+    }
 }
 
 
