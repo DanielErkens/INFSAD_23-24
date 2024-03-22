@@ -42,14 +42,14 @@ public class counterSpell : CardEffect {
 
     public override void applyEffect()
     {
-        GameState.getInstance().Counters.TryPop(out Card result);
+        GameState.getInstance().Counters.TryPop(out CardEffect result);
     }
 
     public override void checkActivationCondition()
     {
         // Check if there is an action to counter
 
-
+        GameState.getInstance().Counters.Push(this);
     }
 }
 
@@ -74,7 +74,7 @@ public class buffCreature : CardEffect {
         // Check if creatures exist to apply effect to
 
         if (Owner.CardState.isInPlay()) {
-            applyEffect();
+            GameState.getInstance().Counters.Push(this);
         }
     }
 }
@@ -96,7 +96,7 @@ public class CreatureEffect : CardEffect{
         // Check if effect should still be active 
 
         if (Owner.CardState.isInPlay()) {
-            applyEffect();
+            GameState.getInstance().Counters.Push(this);
         }
     }
 

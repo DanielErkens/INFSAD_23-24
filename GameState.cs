@@ -10,9 +10,9 @@ public class GameState {
     public Player[] Players { get; set; }
     public int CurrentTurn  { get; set; }
     public Stack<CardEffect> Effects { get; set; }
-    public Stack<Card> Counters { get; set; }
+    public Stack<CardEffect> Counters { get; set; }
 
-    private GameState(ITurnState turnState, Player player1, Player player2, int currentTurn, Stack<CardEffect> effects) {
+    private GameState(ITurnState turnState, Player player1, Player player2, int currentTurn, Stack<CardEffect> effects, Stack<CardEffect> counters) {
         TurnState = turnState;
         Player1 = player1;
         Player2 = player2;
@@ -20,6 +20,7 @@ public class GameState {
         Players = new Player[] {player1, player2};
         CurrentTurn = currentTurn;
         Effects = effects;
+        Counters = counters;
     }
 
     public static GameState getInstance()
@@ -32,7 +33,7 @@ public class GameState {
             Player Player1 = players[0];
             Player Player2 = players[1];
 
-            instance = new GameState(initialState, Player1, Player2, 0, new Stack<CardEffect>());
+            instance = new GameState(initialState, Player1, Player2, 0, new Stack<CardEffect>(), new Stack<CardEffect>());
         }
         // Return the single instance
         return instance;

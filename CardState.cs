@@ -8,102 +8,106 @@ public abstract class CardState
     }
 
     // Enters when no function is found in the currecnt card state
-    public virtual void applyEffect() { Console.WriteLine("Unable to applyEffect"); }
-    public virtual void reset() { Console.WriteLine("Unable to reset"); }
+    public virtual void draw() { Console.WriteLine("Unable to applyEffect"); }
+
     public virtual void playCard() { Console.WriteLine("Unable to play card"); }
+
+    public virtual void turnLand() { Console.WriteLine("Unable to turn land"); }
+
+    public virtual void restoreLand() { Console.WriteLine("Unable to reset land"); }
+
+    public virtual void activateCard() { Console.WriteLine("Unable to applyEffect"); }
+
     public virtual Boolean isInPlay() { return false; }
 
 
 }
 
-public class ActivatedState : CardState {
+public class InDeck : CardState {
 
-    public ActivatedState(Card card) : base(card) { }
+    public InDeck(Card card) : base(card) { }
 
-    public void applyEffect() {
-        // Apply the effect of the card
-        System.Console.WriteLine("Applying effect");
-    }
-
-    public override void reset() {
-        System.Console.WriteLine("Resetting");
+    public override void draw()
+    {
+        card.CardState = new InHand(this.card);
     }
 
 }
 
-public class DeactivatedState : CardState {
+public class InHand : CardState {
 
-    public DeactivatedState(Card card) : base(card) { }
+    public InHand(Card card) : base(card) { }
 
-    public override void applyEffect() {
-        // Do nothing
-        System.Console.WriteLine("Applying effect");
-    }
+    public override void playCard()
+    {
+        if(card.ActivationEffect != null) {
+            card.ActivationEffect.checkActivationCondition();
+        }
 
-    public override void reset() {
-        System.Console.WriteLine("Resetting");
-    }
-}
-
-public class DiscardedState : CardState {
-
-    public DiscardedState(Card card) : base(card) { }
-
-    public override void applyEffect() {
-        // Remove effect from stack of effects in gamestate
-        System.Console.WriteLine("Applying effect");
-    }
-
-    public override void reset() {
-        System.Console.WriteLine("Resetting");
+        card.CardState = new InPlay(this.card);
     }
 }
 
-public class PlayedState : CardState {
+public class InPlay : CardState {
 
-    public PlayedState(Card card) : base(card) { }
+    public InPlay(Card card) : base(card) { }
 
-    public override void applyEffect() {
-        // Apply the effect of the card
-        System.Console.WriteLine("Applying effect");
-    }
-
-    public override void reset() {
-        System.Console.WriteLine("Resetting");
-    }
-
-    public override bool isInPlay() {
-        return true;
-    }
-}
-
-public class NotPlayedState : CardState {
-
-    public NotPlayedState(Card card) : base(card) { }
-
-    public override void applyEffect() {
-        // Apply the effect of the card
-        System.Console.WriteLine("Applying effect");
-    }
-
-    public override void playCard() {
-        this.card.CardState = new PlayedState(this.card);
-    }
-
-    public override void reset() {
-        System.Console.WriteLine("Resetting");
+    public override void activateCard()
+    {
+        switch(card)
+        {
+            case LandCard:
+                LandCard land = card as LandCard;
+                land.Owner.Energy[land.CardColor] +=1;
+                land.turned = true;
+                break;
+            case SpellCard:
+                SpellCard spell = card as SpellCard;
+                spell.ActivationEffect.checkActivationCondition();
+                break;
+            case CreatureCard:
+                // TODO add attack as effect and add to counter stack
+                CreatureCard creature = card as CreatureCard;
+                break;
+            default:
+                throw new ArgumentException("Unknown card type: ");
+        }
     }
 }
 
-public class TurnedState : CardState {
+public class InDiscard : CardState {
 
-    public TurnedState(Card card) : base(card) { }
+    public InDiscard(Card card) : base(card) { }
 
-    public override void applyEffect() {
-        System.Console.WriteLine("Applying effect");
-    }
-
-    public override void reset() {
-        System.Console.WriteLine("Resetting");
-    }
 }
+
+// public class NotPlayedState : CardState {
+
+//     public NotPlayedState(Card card) : base(card) { }
+
+//     public override void activateCard() {
+//         // Apply the effect of the card
+//         System.Console.WriteLine("Applying effect");
+//     }
+
+//     public override void playCard() {
+//         this.card.CardState = new PlayedState(this.card);
+//     }
+
+//     public override void restoreLand() {
+//         System.Console.WriteLine("Resetting");
+//     }
+// }
+
+// public class TurnedState : CardState {
+
+//     public TurnedState(Card card) : base(card) { }
+
+//     public override void activateCard() {
+//         System.Console.WriteLine("Applying effect");
+//     }
+
+//     public override void restoreLand() {
+//         System.Console.WriteLine("Resetting");
+//     }
+// }

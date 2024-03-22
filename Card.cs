@@ -13,8 +13,7 @@ public class CardFactory {
     {
         get
         {
-            if (instance == null)
-                instance = new CardFactory();
+            instance ??= new CardFactory();
             return instance;
         }
     }
@@ -71,7 +70,7 @@ public abstract class Card
         Owner = owner;
         Name = name;
         CardColor = cardColor;
-        CardState = new NotPlayedState(this);
+        CardState = new InDeck(this);
         GameState = GameState.getInstance();
         ActivationEffect = activationEffect;
         Effects = effects ?? new CardEffect[0];
@@ -90,10 +89,11 @@ public class LandCard : Card
     public override void activate()
     {
         // Change turned state here
+        // Cardstate....
     }
 
     public void reset() {
-        this.CardState.reset();
+        this.CardState.restoreLand();
     }
 }
 
