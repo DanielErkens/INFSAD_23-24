@@ -77,6 +77,10 @@ public abstract class Card
         CardType = cardType;
     }
     public abstract void activate();
+
+    public abstract void reset();
+
+    public abstract void discard();
 }
 
 public class LandCard : Card
@@ -88,12 +92,16 @@ public class LandCard : Card
 
     public override void activate()
     {
-        // Change turned state here
-        // Cardstate....
+        this.CardState.useCard();
     }
 
-    public void reset() {
-        this.CardState.restoreLand();
+    public override void reset() {
+        this.CardState.reset();
+    }
+
+    public override void discard()
+    {
+        this.CardState.discard();
     }
 }
 
@@ -108,7 +116,15 @@ public class SpellCard : Card
     
     public override void activate()
     {
-        
+        this.CardState.useCard();
+    }
+    public override void reset() {
+        CardState.reset();
+    }
+
+    public override void discard()
+    {
+        this.CardState.discard();
     }
 }
 
@@ -127,7 +143,15 @@ public class CreatureCard : Card
 
     public override void activate()
     {
-        // Apply effects of the creature card
+        this.CardState.useCard();
+    }
+
+    public void attack() {
+        this.CardState.useCard();
+    }
+
+    public override void reset() {
+        CardState.reset();
     }
 
     public void increaseAttack(int buff) {
@@ -136,6 +160,11 @@ public class CreatureCard : Card
 
     public void increaseDefense(int buff) {
         this.Defense += buff;
+    }
+    
+    public override void discard()
+    {
+        this.CardState.discard();
     }
 }
 

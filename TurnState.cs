@@ -13,15 +13,16 @@ public class PreparationState : ITurnState {
 
         // reset lands
         foreach(Card card in GameState.getInstance().Player1.Permanents) {
-            if (card is LandCard) {
-                ((LandCard)card).turned = false;
-            }
+            card.reset();
+            // if (card is LandCard) {
+            //     ((LandCard)card).turned = false;
+            // }
         }
 
         foreach(Card card in GameState.getInstance().Player2.Permanents) {
-            if (card is LandCard) {
-                ((LandCard)card).turned = false;
-            }
+            // if (card is LandCard) {
+            //     ((LandCard)card).turned = false;
+            // }
         }
 
         UpdateCardEffectIsActive();
@@ -87,6 +88,7 @@ public class EndingState : ITurnState {
 
         UpdateCardEffectIsActive();
         
+        GameState.getInstance().CurrentTurn += 1;
         GameState.getInstance().TurnState = new PreparationState();
     }
 

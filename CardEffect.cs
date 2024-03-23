@@ -34,6 +34,26 @@ public abstract class CardEffect {
     public abstract void checkActivationCondition();
 }
 
+public class attackEffect : CardEffect {
+    public attackEffect(int turnPlayed, Card owner, bool isActive, int turnsActive, Target target = Target.Other) : base("Attack", "attacks opponent", turnPlayed, owner, isActive, 1, Target.Other) {
+
+    }
+
+    public override void applyEffect()
+    {
+        int opponent = GameState.getInstance().CurrentTurn%2 == 0 ? 1 : 0;
+        CreatureCard creature = Owner as CreatureCard;
+        GameState.getInstance().Players[opponent].takeDamage(creature.Attack);
+    }
+
+    public override void checkActivationCondition()
+    {
+        if (Owner is CreatureCard) {
+            GameState.getInstance().Counters.Push(this);
+        }
+    }
+}
+
 
 public class counterSpell : CardEffect {
     public counterSpell(int turnPlayed, Card owner, bool isActive, int turnsActive, Target target) : base("Counter", "Removes last opponent action", turnPlayed, owner, isActive, turnsActive, target) {
@@ -72,10 +92,8 @@ public class buffCreature : CardEffect {
         // Check if effect should still be active 
 
         // Check if creatures exist to apply effect to
-
-        if (Owner.CardState.isInPlay()) {
-            GameState.getInstance().Counters.Push(this);
-        }
+        
+        GameState.getInstance().Counters.Push(this);
     }
 }
 
@@ -88,16 +106,15 @@ public class CreatureEffect : CardEffect{
     {
         Player Victim = Owner.Owner == GameState.getInstance().Player1 ? GameState.getInstance().Player1 : GameState.getInstance().Player2;  
 
-        Victim.discardCard(Victim.Hand.Last());        
+        Victim.discardCard();        
     }
 
     public override void checkActivationCondition()
     {
         // Check if effect should still be active 
 
-        if (Owner.CardState.isInPlay()) {
-            GameState.getInstance().Counters.Push(this);
-        }
+        GameState.getInstance().Counters.Push(this);
+
     }
 
 }

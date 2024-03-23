@@ -8,18 +8,11 @@ public abstract class CardState
     }
 
     // Enters when no function is found in the currecnt card state
-    public virtual void draw() { Console.WriteLine("Unable to applyEffect"); }
+    public virtual void useCard() { Console.WriteLine("Unable to activate"); }
 
-    public virtual void playCard() { Console.WriteLine("Unable to play card"); }
+    public virtual void reset() { Console.WriteLine("Unable to reset land"); }
 
-    public virtual void turnLand() { Console.WriteLine("Unable to turn land"); }
-
-    public virtual void restoreLand() { Console.WriteLine("Unable to reset land"); }
-
-    public virtual void activateCard() { Console.WriteLine("Unable to applyEffect"); }
-
-    public virtual Boolean isInPlay() { return false; }
-
+    public virtual void discard() { Console.WriteLine("Unable to discard"); }
 
 }
 
@@ -27,9 +20,14 @@ public class InDeck : CardState {
 
     public InDeck(Card card) : base(card) { }
 
-    public override void draw()
+    public override void useCard()
     {
         card.CardState = new InHand(this.card);
+    }
+
+    public override void discard()
+    {
+        card.CardState = new InDiscard(card);
     }
 
 }
@@ -38,7 +36,7 @@ public class InHand : CardState {
 
     public InHand(Card card) : base(card) { }
 
-    public override void playCard()
+    public override void useCard()
     {
         if(card.ActivationEffect != null) {
             card.ActivationEffect.checkActivationCondition();
@@ -46,31 +44,62 @@ public class InHand : CardState {
 
         card.CardState = new InPlay(this.card);
     }
+
+    public override void discard()
+    {
+        card.CardState = new InDiscard(card);
+    }
 }
 
 public class InPlay : CardState {
 
     public InPlay(Card card) : base(card) { }
 
-    public override void activateCard()
+    public override void useCard()
     {
         switch(card)
         {
             case LandCard:
                 LandCard land = card as LandCard;
-                land.Owner.Energy[land.CardColor] +=1;
+
+                if (!land.turned) {
+                    land.Owner.Energy[land.CardColor] +=1;
+                }
+
                 land.turned = true;
+
                 break;
+
             case SpellCard:
+
                 SpellCard spell = card as SpellCard;
-                spell.ActivationEffect.checkActivationCondition();
+
+                foreach(CardEffect f in spell.Effects) {
+                    f.checkActivationCondition();
+                }
+
                 break;
+
             case CreatureCard:
-                // TODO add attack as effect and add to counter stack
+            
                 CreatureCard creature = card as CreatureCard;
+
+                GameState.getInstance().Counters.Push( new attackEffect( GameState.getInstance().CurrentTurn, this.card, false, 0 ) );
+
                 break;
+
             default:
                 throw new ArgumentException("Unknown card type: ");
+        }
+    }
+
+    public override void reset()
+    {
+        if (card is LandCard) {
+            ((LandCard)card).turned = false;
+        }
+        else {
+            base.reset();
         }
     }
 }
@@ -80,34 +109,3 @@ public class InDiscard : CardState {
     public InDiscard(Card card) : base(card) { }
 
 }
-
-// public class NotPlayedState : CardState {
-
-//     public NotPlayedState(Card card) : base(card) { }
-
-//     public override void activateCard() {
-//         // Apply the effect of the card
-//         System.Console.WriteLine("Applying effect");
-//     }
-
-//     public override void playCard() {
-//         this.card.CardState = new PlayedState(this.card);
-//     }
-
-//     public override void restoreLand() {
-//         System.Console.WriteLine("Resetting");
-//     }
-// }
-
-// public class TurnedState : CardState {
-
-//     public TurnedState(Card card) : base(card) { }
-
-//     public override void activateCard() {
-//         System.Console.WriteLine("Applying effect");
-//     }
-
-//     public override void restoreLand() {
-//         System.Console.WriteLine("Resetting");
-//     }
-// }

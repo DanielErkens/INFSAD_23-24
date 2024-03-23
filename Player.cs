@@ -71,11 +71,14 @@ public class Player
         Lives -= damage;
     }
 
-    public void discardCard(Card CardToDiscard) {
+    public void discardCard() {
         // Discard the card
         // Implementation depends on your game's card management system
         if(!isGameStateSet()) {
             GameState = GameState.getInstance();
+            Card cardToDiscard = Hand.Last();
+            cardToDiscard.discard();
+            Hand.RemoveAt(Hand.Count -1);
         }
     }
 
