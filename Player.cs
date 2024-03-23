@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 public class Player
 {
     public string Name { get; set; }
@@ -51,6 +53,33 @@ public class Player
         Hand.RemoveAt(0);
     }
 
+    public void playLand(CardColor color, int total) {
+        for(int i = Permanents.Count - 1; i >= 0; i--) {
+            Card card = Permanents[i];
+
+            if (card is LandCard) {
+                LandCard temp = card as LandCard;
+                if(temp.CardColor == color) {
+                    bool activated = temp.activate();
+                }
+            }
+
+        }
+    }
+
+    public void playCreature() {
+        for(int i = Permanents.Count - 1; i >= 0; i--) {
+            Card card = Permanents[i];
+
+            if (card is CreatureCard) {
+                CreatureCard temp = card as CreatureCard;
+                temp.attack();
+                break;
+            }
+
+        }
+    }
+
     public bool payEnergy(CardColor color, int cost) {
         if( Energy[color] >= cost ) {
             Energy[color] -= cost;
@@ -88,18 +117,13 @@ public class Player
     }
 
     public void discardCard() {
-        // Discard the card
-        // Implementation depends on your game's card management system
-        if(!isGameStateSet()) {
-            GameState = GameState.getInstance();
-            Card cardToDiscard = Hand.Last();
-            cardToDiscard.discard();
-            Hand.RemoveAt(Hand.Count -1);
-        }
+        Card cardToDiscard = Hand.Last();
+        cardToDiscard.discard();
+        Hand.RemoveAt(Hand.Count -1);
     }
 
     public void trimCards() {
-        while (Deck.Count > 7) {
+        while (Hand.Count > 7) {
             discardCard();
         }
     }

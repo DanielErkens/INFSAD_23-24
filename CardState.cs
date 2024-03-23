@@ -10,11 +10,11 @@ public abstract class CardState
     }
 
     // Enters when no function is found in the currecnt card state
-    public virtual void useCard() { Console.WriteLine("Unable to activate"); }
+    public virtual bool useCard() { Console.WriteLine("Unable to activate"); return false; }
 
-    public virtual void reset() { Console.WriteLine("Unable to reset land"); }
+    public virtual bool reset() { Console.WriteLine("Unable to reset land"); return false;}
 
-    public virtual void discard() { Console.WriteLine("Unable to discard"); }
+    public virtual bool discard() { Console.WriteLine("Unable to discard"); return false;}
 
 }
 
@@ -22,14 +22,16 @@ public class InDeck : CardState {
 
     public InDeck(Card card) : base(card) { }
 
-    public override void useCard()
+    public override bool useCard()
     {
         card.CardState = new InHand(this.card);
+        return true;
     }
 
-    public override void discard()
+    public override bool discard()
     {
         card.CardState = new InDiscard(card);
+        return true;
     }
 
 }
@@ -38,25 +40,27 @@ public class InHand : CardState {
 
     public InHand(Card card) : base(card) { }
 
-    public override void useCard()
+    public override bool useCard()
     {
-        if(card.ActivationEffect != null) {
-            card.ActivationEffect.checkActivationCondition();
-        }
-
-        // check cost
+        // if(card.ActivationEffect != null) {
+        //     card.ActivationEffect.checkActivationCondition();
+        // }
 
         switch(card)
         {
             case LandCard:
                 LandCard land = card as LandCard;
                 card.CardState = new InPlay(this.card);
-                break;
+                return true;
 
             case SpellCard:
                 SpellCard spell = card as SpellCard;
                 if(card.Owner.payEnergy(spell.CardColor, spell.Cost)) {
                     card.CardState = new InPlay(this.card);
+                    if(card.ActivationEffect != null) {
+                        card.ActivationEffect.checkActivationCondition();
+                    }
+                    return true;
                 }
                 else {
                     Console.WriteLine("Unable to play. you're broke");
@@ -67,6 +71,10 @@ public class InHand : CardState {
                 CreatureCard creature = card as CreatureCard;
                 if(card.Owner.payEnergy(creature.CardColor, creature.Cost)) {
                     card.CardState = new InPlay(this.card);
+                    if(card.ActivationEffect != null) {
+                        card.ActivationEffect.checkActivationCondition();
+                    }
+                    return true;
                 }
                 else {
                     Console.WriteLine("Unable to play. you're broke");
@@ -76,12 +84,14 @@ public class InHand : CardState {
             default:
                 throw new ArgumentException("Unknown card type: ");
         }
+        return false;
 
     }
 
-    public override void discard()
+    public override bool discard()
     {
         card.CardState = new InDiscard(card);
+        return true;
     }
 }
 
@@ -89,7 +99,7 @@ public class InPlay : CardState {
 
     public InPlay(Card card) : base(card) { }
 
-    public override void useCard()
+    public override bool useCard()
     {
         switch(card)
         {
@@ -101,8 +111,7 @@ public class InPlay : CardState {
                 }
 
                 land.turned = true;
-
-                break;
+                return true;
 
             case SpellCard:
 
@@ -116,7 +125,7 @@ public class InPlay : CardState {
                     spell.CardState = new InDiscard(card);
                 }
 
-                break;
+                return true;
 
             case CreatureCard:
             
@@ -124,20 +133,22 @@ public class InPlay : CardState {
 
                 GameState.getInstance().Counters.Push( new attackEffect( GameState.getInstance().CurrentTurn, this.card, false, 0 ) );
 
-                break;
+                return true;
 
             default:
+                return false;
                 throw new ArgumentException("Unknown card type: ");
         }
     }
 
-    public override void reset()
+    public override bool reset()
     {
         if (card is LandCard) {
             ((LandCard)card).turned = false;
+            return true;
         }
         else {
-            base.reset();
+            return base.reset();
         }
     }
 }

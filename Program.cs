@@ -37,6 +37,7 @@ public class Program {
 
         // 1 blue creature
         temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.creature, CardColor.Blue, null, null, cost: 2, attack: 2, defence: 2);
+        temp.CardState = new InHand(temp);
         temp.ActivationEffect = new CreatureEffect(gameState.CurrentTurn, temp, false, 0, Target.Other);
         gameState.Player1.Hand.Add(temp);
 
@@ -75,15 +76,81 @@ public class Program {
         gameState.Player2.Hand.Add(temp);
 
         for (int i=0; i<6; i++) {
-            gameState.Player2.Hand.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.White, null, null, cost: 1));
+            Card temphand = CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.White, null, null, cost: 1);
+            temphand.CardState = new InHand(temphand);
+            gameState.Player2.Hand.Add(temphand);
         }
     }
 
     public static void play_turns() {
         GameState gameState = GameState.getInstance();
-    // Player A turn 1: 2 blue lands
 
-    // Player B turn 1: Plays red land
+        // Arnold
+        // preparation phase -> drawing phase
+        gameState.nextTurnState(); 
+        // Get card from deck  
+        gameState.Players[gameState.CurrentTurn % 2].getCardFromDeck();
+        // drawing phase -> main/ attack phase
+        gameState.nextTurnState();
+        // Play 2 lands (blue) 
+        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        // main/ attack phase -> ending phase
+        gameState.nextTurnState();
+        // ending phase -> preperation pahse
+        gameState.nextTurnState();
+
+
+        // switch turn to Bryce
+        // preparation phase -> drawing phase
+        gameState.nextTurnState();
+        // Get card from deck
+        gameState.Players[gameState.CurrentTurn % 2].getCardFromDeck();
+        // drawing phase -> main/ attack phase
+        gameState.nextTurnState();
+        // Play 1 land {red}
+        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        // main/ attack phase -> ending phase
+        gameState.nextTurnState();
+        // ending phase -> preperation pahse
+        gameState.nextTurnState();
+
+
+        // Turn 2
+
+        // Arnold
+        // preparation phase -> drawing phase
+        gameState.nextTurnState(); 
+        // Get card from deck
+        gameState.Players[gameState.CurrentTurn % 2].getCardFromDeck();
+        // drawing phase -> main/ attack phase
+        gameState.nextTurnState(); 
+        // Play 1 lands (green)
+        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        // Turn 2 lands (blue)
+        gameState.Players[gameState.CurrentTurn % 2].playLand(CardColor.Blue, 2);
+        // Play Creature (blue)
+        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        // main/ attack phase -> ending phase
+        gameState.nextTurnState();
+        // ending phase -> preperation pahse
+        gameState.nextTurnState();
+
+
+        // Bryce
+        // preparation phase -> drawing phase
+        gameState.nextTurnState();
+        // Get card from deck
+        gameState.Players[gameState.CurrentTurn % 2].getCardFromDeck();
+        // drawing phase -> main/ attack phase
+        gameState.nextTurnState();
+        // main/ attack phase -> ending phase
+        gameState.nextTurnState();
+        // ending phase -> preperation pahse
+        gameState.nextTurnState();
+
+
+
 
     // Player A turn 2: Draws card (blue land)
     // Plays land (Green Land)

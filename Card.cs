@@ -76,11 +76,11 @@ public abstract class Card
         Effects = effects ?? new CardEffect[0];
         CardType = cardType;
     }
-    public abstract void activate();
+    public abstract bool activate();
 
-    public abstract void reset();
+    public abstract bool reset();
 
-    public abstract void discard();
+    public abstract bool discard();
 }
 
 public class LandCard : Card
@@ -90,18 +90,18 @@ public class LandCard : Card
     public LandCard(Player owner, string name, CardColor cardColor, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects) : base(owner, name, cardColor, cardType, activationEffect, effects)
     {}
 
-    public override void activate()
+    public override bool activate()
     {
-        this.CardState.useCard();
+        return this.CardState.useCard();
     }
 
-    public override void reset() {
-        this.CardState.reset();
+    public override bool reset() {
+        return this.CardState.reset();
     }
 
-    public override void discard()
+    public override bool discard()
     {
-        this.CardState.discard();
+        return this.CardState.discard();
     }
 }
 
@@ -114,17 +114,17 @@ public class SpellCard : Card
         Cost = cost;
     }
     
-    public override void activate()
+    public override bool activate()
     {
-        this.CardState.useCard();
+        return this.CardState.useCard();
     }
-    public override void reset() {
-        CardState.reset();
+    public override bool reset() {
+        return CardState.reset();
     }
 
-    public override void discard()
+    public override bool discard()
     {
-        this.CardState.discard();
+        return this.CardState.discard();
     }
 }
 
@@ -141,17 +141,17 @@ public class CreatureCard : Card
         Cost = cost;
     }
 
-    public override void activate()
+    public override bool activate()
     {
-        this.CardState.useCard();
+        return this.CardState.useCard();
     }
 
     public void attack() {
         this.CardState.useCard();
     }
 
-    public override void reset() {
-        this.CardState.reset();
+    public override bool reset() {
+        return this.CardState.reset();
     }
 
     public void increaseAttack(int buff) {
@@ -171,9 +171,9 @@ public class CreatureCard : Card
         return false;
     }
 
-    public override void discard()
+    public override bool discard()
     {
-        this.CardState.discard();
+        return this.CardState.discard();
     }
 }
 

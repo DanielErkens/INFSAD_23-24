@@ -104,7 +104,7 @@ public class CreatureEffect : CardEffect{
 
     public override void applyEffect()
     {
-        Player Victim = Owner.Owner == GameState.getInstance().Player1 ? GameState.getInstance().Player1 : GameState.getInstance().Player2;  
+        Player Victim = Owner.Owner == GameState.getInstance().Player1 ? GameState.getInstance().Player2 : GameState.getInstance().Player1;  
 
         Victim.discardCard();        
     }
