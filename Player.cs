@@ -30,28 +30,33 @@ public class Player
         return GameState != null;
     }
 
-    public void playLand(LandCard LandToPlay) {
-        // Play the land card
-        // Implementation depends on your game's land management system
-        if(!isGameStateSet()) {
-            GameState = GameState.getInstance();
-        }
+    public void getCardFromDeck() {
+        Card receivedCard = Deck.First();
+        Hand.Add(receivedCard);
+        receivedCard.activate();
+        Deck.RemoveAt(0);
     }
 
-    public void turnLand(LandCard LandToTurn) {
-        // Turn the land card
-        // Implementation depends on your game's land management system
-        if(!isGameStateSet()) {
-            GameState = GameState.getInstance();
+    public void playCard() {
+        Card CardToPlay = Hand.First();
+
+        if (CardToPlay.CardType == CardType.Permanent) {
+            Permanents.Add(CardToPlay);
         }
+        else {
+            DiscardPile.Add(CardToPlay);
+        }
+
+        CardToPlay.activate();
+        Hand.RemoveAt(0);
     }
 
-    public void playCard(Card CardToPlay) {
-        // Play the spell card
-        // Implementation depends on your game's card management system
-        if(!isGameStateSet()) {
-            GameState = GameState.getInstance();
+    public bool payEnergy(CardColor color, int cost) {
+        if( Energy[color] >= cost ) {
+            Energy[color] -= cost;
+            return true;
         }
+        return false;
     }
 
     public void passTurn() {
@@ -63,11 +68,22 @@ public class Player
     }
 
     public void takeDamage(int damage) {
-        // Take damage
-        // Implementation depends on your game's damage management system
-        if(!isGameStateSet()) {
-            GameState = GameState.getInstance();
+
+        for(int i = Permanents.Count - 1; i >= 0; i--) {
+            Card card = Permanents[i];
+
+            if (card is CreatureCard) {
+                CreatureCard temp = card as CreatureCard;
+                bool dead = temp.takeDamage(damage);
+
+                if (dead) {
+                    Permanents.RemoveAt(i);
+                }
+                break;
+            }
+
         }
+
         Lives -= damage;
     }
 
@@ -83,9 +99,8 @@ public class Player
     }
 
     public void trimCards() {
-        if (this.Deck.Count > 7)
-        {
-            this.Deck.RemoveRange(7, this.Deck.Count - 7);
+        while (Deck.Count > 7) {
+            discardCard();
         }
     }
 }

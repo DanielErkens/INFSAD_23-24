@@ -151,7 +151,7 @@ public class CreatureCard : Card
     }
 
     public override void reset() {
-        CardState.reset();
+        this.CardState.reset();
     }
 
     public void increaseAttack(int buff) {
@@ -161,7 +161,16 @@ public class CreatureCard : Card
     public void increaseDefense(int buff) {
         this.Defense += buff;
     }
-    
+
+    public bool takeDamage(int dmg) {
+        this.Defense -= dmg;
+        if (this.Defense <= 0) {
+            this.CardState = new InDiscard(this);
+            return true;
+        }
+        return false;
+    }
+
     public override void discard()
     {
         this.CardState.discard();

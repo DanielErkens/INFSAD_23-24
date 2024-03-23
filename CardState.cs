@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 public abstract class CardState
 {
     protected Card card;
@@ -42,7 +44,39 @@ public class InHand : CardState {
             card.ActivationEffect.checkActivationCondition();
         }
 
-        card.CardState = new InPlay(this.card);
+        // check cost
+
+        switch(card)
+        {
+            case LandCard:
+                LandCard land = card as LandCard;
+                card.CardState = new InPlay(this.card);
+                break;
+
+            case SpellCard:
+                SpellCard spell = card as SpellCard;
+                if(card.Owner.payEnergy(spell.CardColor, spell.Cost)) {
+                    card.CardState = new InPlay(this.card);
+                }
+                else {
+                    Console.WriteLine("Unable to play. you're broke");
+                }
+                break;
+
+            case CreatureCard:
+                CreatureCard creature = card as CreatureCard;
+                if(card.Owner.payEnergy(creature.CardColor, creature.Cost)) {
+                    card.CardState = new InPlay(this.card);
+                }
+                else {
+                    Console.WriteLine("Unable to play. you're broke");
+                }
+                break;
+
+            default:
+                throw new ArgumentException("Unknown card type: ");
+        }
+
     }
 
     public override void discard()
@@ -76,6 +110,10 @@ public class InPlay : CardState {
 
                 foreach(CardEffect f in spell.Effects) {
                     f.checkActivationCondition();
+                }
+
+                if (spell.CardType == CardType.Instantaneous) {
+                    spell.CardState = new InDiscard(card);
                 }
 
                 break;
