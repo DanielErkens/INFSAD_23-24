@@ -13,10 +13,20 @@ public class PreparationState : ITurnState {
     }
 
     public void PlayPhase() {
-        System.Console.WriteLine("inside prep phase");
+        // System.Console.WriteLine("inside prep phase");
 
         GameState.getInstance().Player1.Energy = new Dictionary<CardColor, int>();
+        GameState.getInstance().Player1.Energy.Add(CardColor.Blue, 0);
+        GameState.getInstance().Player1.Energy.Add(CardColor.Brown, 0);
+        GameState.getInstance().Player1.Energy.Add(CardColor.Red, 0);
+        GameState.getInstance().Player1.Energy.Add(CardColor.Green, 0);
+        GameState.getInstance().Player1.Energy.Add(CardColor.White, 0);
         GameState.getInstance().Player2.Energy = new Dictionary<CardColor, int>();
+        GameState.getInstance().Player2.Energy.Add(CardColor.Blue, 0);
+        GameState.getInstance().Player2.Energy.Add(CardColor.Brown, 0);
+        GameState.getInstance().Player2.Energy.Add(CardColor.Red, 0);
+        GameState.getInstance().Player2.Energy.Add(CardColor.Green, 0);
+        GameState.getInstance().Player2.Energy.Add(CardColor.White, 0);
 
         // reset lands
         foreach(Card card in GameState.getInstance().Player1.Permanents) {
@@ -45,7 +55,7 @@ public class DrawingState : ITurnState {
     }
 
     public void PlayPhase() {
-        System.Console.WriteLine("inside drawing phase");
+        // System.Console.WriteLine("inside drawing phase");
         
         // UpdateCardEffectIsActive();
 
@@ -63,7 +73,7 @@ public class MainState : ITurnState { //Implement pub-sub here
     }
 
     public void PlayPhase() {
-        System.Console.WriteLine("inside main phase");
+        // System.Console.WriteLine("inside main phase");
 
         // UpdateCardEffectIsActive();
 
@@ -90,7 +100,7 @@ public class EndingState : ITurnState {
             resolve.applyEffect();
         }
 
-        System.Console.WriteLine("inside ending phase");
+        // System.Console.WriteLine("inside ending phase");
         if (GameState.getInstance().Player1.Hand.Count > 7)
             GameState.getInstance().Player1.trimCards();
 
@@ -115,7 +125,7 @@ public class GameOverState : ITurnState {
     }
     
     public void PlayPhase() {
-        System.Console.WriteLine("inside gameover phase");
+        // System.Console.WriteLine("inside gameover phase");
     }
 
     // public void UpdateCardEffectIsActive() {}

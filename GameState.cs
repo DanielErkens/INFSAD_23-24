@@ -45,8 +45,8 @@ public class GameState {
     }
 
     private static Player[] CreatePlayers() {
-        Player Player1 = new Player("Player 1");
-        Player Player2 = new Player("Player 2");
+        Player Player1 = new Player("Arold");
+        Player Player2 = new Player("Bryce");
         Player[] players = {Player1, Player2};
         return players;
     }
@@ -74,13 +74,10 @@ public class GameState {
     public void counter() {
         // check if last player attacked
         if (counterHandler != null) {
-            Console.WriteLine(counterHandler.GetInvocationList().Length);
+            // Console.WriteLine(counterHandler.GetInvocationList().Length);
             // Notify opponent they can counter
             counterHandler();   
             TurnState = new MainState();
-        }
-        else {
-            Console.WriteLine("counterhandler is empty");
         }
 
 

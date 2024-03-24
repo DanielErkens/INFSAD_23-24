@@ -154,7 +154,7 @@ public class InPlay : CardState {
             return true;
         }
         else {
-            return base.reset();
+            return false;
         }
     }
 }

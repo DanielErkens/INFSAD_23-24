@@ -54,12 +54,14 @@ public class Player
     }
 
     public void useLand(CardColor color, int total) {
+        int current = 0;
         for(int i = Permanents.Count - 1; i >= 0; i--) {
             Card card = Permanents[i];
 
             if (card is LandCard) {
                 LandCard temp = card as LandCard;
-                if(temp.CardColor == color) {
+                if(temp.CardColor == color && current < total) {
+                    current +=1;
                     bool activated = temp.activate();
                 }
             }
