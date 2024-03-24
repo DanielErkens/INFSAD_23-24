@@ -25,7 +25,7 @@ public class CardFactory {
             case CardPlaceHolder.spell:
                 return new SpellCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects, cost);
             case CardPlaceHolder.creature:
-                return new CreatureCard(owner, color.ToString() + "_" + type.ToString(), color, CardType.Permanent, activationEffect, effects, cost, attack, defence);
+                return new CreatureCard(owner, color.ToString() + "_" + type.ToString(), color, CardType.Permanent, activationEffect, effects, cost, attack >= 0 ? attack : 0, defence > 0 ? defence : 1);
             default:
             //  Throw an exception
                 throw new ArgumentException("Unknown card type: " + type);

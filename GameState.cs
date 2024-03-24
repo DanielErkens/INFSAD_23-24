@@ -9,6 +9,9 @@ public class GameState {
 
     public Player[] Players { get; set; }
     public int CurrentTurn  { get; set; }
+    public int CounterTurn { get; set; }
+    public delegate void attackHandler();
+    public event attackHandler counterHandler;
 
     // board effects are not part of the assignment 
     // public Stack<CardEffect> Effects { get; set; }
@@ -37,7 +40,7 @@ public class GameState {
 
             instance = new GameState(initialState, Player1, Player2, 0, new Stack<CardEffect>(), new Stack<CardEffect>());
         }
-        // Return the single instance
+        // Return the singleton instance
         return instance;
     }
 
@@ -63,8 +66,33 @@ public class GameState {
     // }
 
     public void nextTurnState() {
+        // event handler here???
         this.TurnState.PlayPhase();
 
+    }
+
+    public void counter() {
+        // check if last player attacked
+        if (counterHandler != null) {
+            Console.WriteLine(counterHandler.GetInvocationList().Length);
+            // Notify opponent they can counter
+            counterHandler();   
+            TurnState = new MainState();
+        }
+        else {
+            Console.WriteLine("counterhandler is empty");
+        }
+
+
+        // unsub the player that is about to counter
+        // counterHandler -=Players[(CurrentTurn + CounterTurn) % 2].playTurn; 
+
+        // sub the other user for counter
+        // counterHandler +=Players[(CurrentTurn + CounterTurn + 1) % 2].playTurn; 
+    }
+
+    public int getCounterLength() {
+        return counterHandler != null ? counterHandler.GetInvocationList().Length : 0;
     }
 
 }

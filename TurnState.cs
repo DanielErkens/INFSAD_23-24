@@ -1,3 +1,5 @@
+using System.Dynamic;
+
 public interface ITurnState { //Implement here state design pattern and Composite pattern
     void PlayPhase();
 
@@ -12,6 +14,9 @@ public class PreparationState : ITurnState {
 
     public void PlayPhase() {
         System.Console.WriteLine("inside prep phase");
+
+        GameState.getInstance().Player1.Energy = new Dictionary<CardColor, int>();
+        GameState.getInstance().Player2.Energy = new Dictionary<CardColor, int>();
 
         // reset lands
         foreach(Card card in GameState.getInstance().Player1.Permanents) {
@@ -61,6 +66,10 @@ public class MainState : ITurnState { //Implement pub-sub here
         System.Console.WriteLine("inside main phase");
 
         // UpdateCardEffectIsActive();
+
+        int temp = GameState.getInstance().getCounterLength(); 
+        GameState.getInstance().counter();
+        GameState.getInstance().CounterTurn = 0;
 
         GameState.getInstance().TurnState = new EndingState();
 

@@ -53,7 +53,7 @@ public class Player
         Hand.RemoveAt(0);
     }
 
-    public void playLand(CardColor color, int total) {
+    public void useLand(CardColor color, int total) {
         for(int i = Permanents.Count - 1; i >= 0; i--) {
             Card card = Permanents[i];
 
@@ -67,7 +67,7 @@ public class Player
         }
     }
 
-    public void playCreature() {
+    public void useCreature() {
         for(int i = Permanents.Count - 1; i >= 0; i--) {
             Card card = Permanents[i];
 
@@ -88,13 +88,33 @@ public class Player
         return false;
     }
 
-    public void passTurn() {
-        // Pass the turn
-        // Implementation depends on your game's turn management system
-        if(!isGameStateSet()) {
-            GameState = GameState.getInstance();
-        }
+    // user input required for playturn
+    public void playTurn() {
+        // get user input
+
+        // play turn
+        // I.E. passTurn() or attack()
+
+        // turns are hard coded in program.cs
     }
+
+    public void passTurn() {
+        // remove self from counter 
+        GameState.getInstance().counterHandler -= GameState.getInstance().Players[(GameState.getInstance().CurrentTurn + GameState.getInstance().CounterTurn) % 2].playTurn; 
+        return;
+    }
+
+    public void attack() {
+        // remove self from counter 
+        GameState.getInstance().counterHandler -= GameState.getInstance().Players[(GameState.getInstance().CurrentTurn + GameState.getInstance().CounterTurn) % 2].playTurn;
+
+        GameState.getInstance().CounterTurn +=1;
+
+        // add opponent to counter 
+        GameState.getInstance().counterHandler += GameState.getInstance().Players[(GameState.getInstance().CurrentTurn + GameState.getInstance().CounterTurn + 1) % 2].playTurn; 
+        return;
+    }
+
 
     public void takeDamage(int damage) {
 

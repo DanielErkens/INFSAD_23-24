@@ -8,10 +8,14 @@ public class Program {
         //Set the gameState for the players
         gameState.Players[0].GameState = gameState;
         gameState.Players[1].GameState = gameState;
+
+        // subscribe
+        // gameState.counterHandler += gameState.Players[(gameState.CurrentTurn + gameState.CounterTurn + 1) % 2].playTurn; 
+        // unsubscribe
+        // gameState.counterHandler -= gameState.Players[(gameState.CurrentTurn + gameState.CounterTurn + 1) % 2].attack; 
     }
 
     public static void init_decks() {
-        // TODO card state needs to reflect 
         GameState gameState = GameState.getInstance();
         Card temp;
         // Arnold
@@ -44,11 +48,13 @@ public class Program {
         // 1 green spell
         temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Green, null, null, cost: 1);
         temp.CardState = new InHand(temp);
+        temp.ActivationEffect = new buffCreature(gameState.CurrentTurn, temp, false, 1, Target.Self);
         gameState.Player1.Hand.Add(temp);
 
         // 1 blue instant counter
         temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Blue, null, null, cost: 1);
         temp.CardState = new InHand(temp);
+        temp.ActivationEffect = new counterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
         gameState.Player1.Hand.Add(temp);
 
         // Filler cards
@@ -73,6 +79,7 @@ public class Program {
         // 1 red instant counter
         temp = CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.spell, CardColor.Red, null, null, cost: 1);
         temp.CardState = new InHand(temp);
+        temp.ActivationEffect = new counterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
         gameState.Player2.Hand.Add(temp);
 
         for (int i=0; i<6; i++) {
@@ -83,18 +90,22 @@ public class Program {
     }
 
     public static void play_turns() {
+        // some notes
+        // playcard() gets first entry in list so cards need bo be put in order
+        // Attack() and Passturn() need to be used to allow for counter attacks. this would normally go through user interaction
+
         GameState gameState = GameState.getInstance();
 
         // Arnold
         // preparation phase -> drawing phase
         gameState.nextTurnState(); 
         // Get card from deck  
-        gameState.Players[gameState.CurrentTurn % 2].getCardFromDeck();
+        CurrentPlayer().getCardFromDeck();
         // drawing phase -> main/ attack phase
         gameState.nextTurnState();
         // Play 2 lands (blue) 
-        gameState.Players[gameState.CurrentTurn % 2].playCard();
-        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        CurrentPlayer().playCard();
+        CurrentPlayer().playCard();
         // main/ attack phase -> ending phase
         gameState.nextTurnState();
         // ending phase -> preperation pahse
@@ -105,11 +116,11 @@ public class Program {
         // preparation phase -> drawing phase
         gameState.nextTurnState();
         // Get card from deck
-        gameState.Players[gameState.CurrentTurn % 2].getCardFromDeck();
+        CurrentPlayer().getCardFromDeck();
         // drawing phase -> main/ attack phase
         gameState.nextTurnState();
         // Play 1 land {red}
-        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        CurrentPlayer().playCard();
         // main/ attack phase -> ending phase
         gameState.nextTurnState();
         // ending phase -> preperation pahse
@@ -122,15 +133,15 @@ public class Program {
         // preparation phase -> drawing phase
         gameState.nextTurnState(); 
         // Get card from deck
-        gameState.Players[gameState.CurrentTurn % 2].getCardFromDeck();
+        CurrentPlayer().getCardFromDeck();
         // drawing phase -> main/ attack phase
         gameState.nextTurnState(); 
         // Play 1 lands (green)
-        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        CurrentPlayer().playCard();
         // Turn 2 lands (blue)
-        gameState.Players[gameState.CurrentTurn % 2].playLand(CardColor.Blue, 2);
+        CurrentPlayer().useLand(CardColor.Blue, 2);
         // Play Creature (blue)
-        gameState.Players[gameState.CurrentTurn % 2].playCard();
+        CurrentPlayer().playCard();
         // main/ attack phase -> ending phase
         gameState.nextTurnState();
         // ending phase -> preperation pahse
@@ -141,7 +152,7 @@ public class Program {
         // preparation phase -> drawing phase
         gameState.nextTurnState();
         // Get card from deck
-        gameState.Players[gameState.CurrentTurn % 2].getCardFromDeck();
+        CurrentPlayer().getCardFromDeck();
         // drawing phase -> main/ attack phase
         gameState.nextTurnState();
         // main/ attack phase -> ending phase
@@ -150,43 +161,82 @@ public class Program {
         gameState.nextTurnState();
 
 
+        // Turn 3
+        // preparation phase -> drawing phase
+        gameState.nextTurnState(); 
+        // Get card from deck
+        CurrentPlayer().getCardFromDeck();
+        // drawing phase -> main/ attack phase
+        gameState.nextTurnState(); 
+        // Play attack creature (blue)
+        CurrentPlayer().useCreature();
+        // Cast spell (green) adds +3/+3
+        CurrentPlayer().useLand(CardColor.Green, 1);
+        CurrentPlayer().playCard();
+        // main/ attack phase -> counter/ attack phase
+        CurrentPlayer().attack();
+        // counter by player 2
+        CurrentPlayer().useLand(CardColor.Red, 1);
+        CurrentPlayer().playCard();
+        // main/ attack phase -> counter/ attack phase
+        CurrentPlayer().attack();
+        // counter by player 1
+        CurrentPlayer().useLand(CardColor.Blue, 1);
+        CurrentPlayer().playCard();
+        // player 2 no longer counters and lets it play out
+        CurrentPlayer().passTurn();
+        // main/ attack phase -> ending phase
+        gameState.nextTurnState();
+        // ending phase -> preperation pahse
+        gameState.nextTurnState();
 
+    }
 
-    // Player A turn 2: Draws card (blue land)
-    // Plays land (Green Land)
-    // Plays blue card of 2 energy (Blue 2/2 creature)
-    // Doesnt attack
-    // Add immediate play affect where opponent discards a random card from their hand
+    public static Player CurrentPlayer() {
+        GameState gameState = GameState.getInstance();
 
-    // Player B turn 2: Draws card (Unknown), but could make it the 1 red energy spell
-
-    // Player A turn 3: Draws card
-    // Attacks with blue 2/2 creature
-    // Gets 1 green energy from land (must be typo since 2 other lands are blue).
-    // With the 1 green energy he plays a green spell which adds +3/+3 to the 2/2 blue creature
-
-    // Player B turn 3: 
-    // Gets red energy from land
-    // Casts instantaneous red spell and stops the green spell from player A (creature still attacking but at +2/+2, then immediately remove affect since its instantaneous)
-
-    // Player A turn 3:
-    // Gets 1 blue energy from land
-    // Casts instantaneous blue spell to stop the red spell from player B (affect gets deleted from red spell. No red affect deleted since its instantaneous, so only affect is +3/+3)
-    // Blue creature is +5/+5, attacks and deals 5 damage to player B (only affect in gameState is +3/+3 since its not mentioned its instantaneous) 
-
-
-
+        Player p = gameState.Players[(gameState.CurrentTurn + gameState.CounterTurn) % 2]; 
+        return p;
     }
 
     public static void Main(String[] args) {
         init_board();
-        // starting state
         init_decks();
         play_turns();
 
-        //Use turnState states to play the turns
-        // gameState.TurnState.PlayPhase();
-        // gameState.TurnState.UpdateCardEffectIsActive();
-        //Check win condition
+        // TODO
+        // Cards can have up to 3 copies in each deck, no more.
+        // Only instantaneous cards can be cast outside the owner turn
+        // Cards (beside lands) contains an activation effect or cost, and some permanent effect.
+        // Temporary effect example: an instantaneous spell costs 3 energy, is a green spell that gives +3/+3 at the creature till the preparation phase. At the preparation phase of the owner, the creature will cease to have the effect of this spell.
+        // Lands can be used only after passing the first [preparation] phase.
+        // Defending creatures
+
+        // current turn calculations should also consider counter turn to make sure its the correct player
+
+        // design patterns to implement
+
+        // 1. **Effects Waiting for Certain Conditions:**
+        //    - **Best Suited Pattern**: Observer Pattern
+        //    - **Explanation**: The Observer pattern is well-suited for implementing effects that wait for certain conditions because it establishes a one-to-many relationship between the subject (the game state) 
+        //      and its observers (the effects). Each effect can observe the game state and be notified when the conditions it's waiting for are met. 
+        //      This allows for a direct and specific relationship between the effects and the game state.
+        //    - **Implementation**: Each effect could register itself as an observer of the game state. 
+        //      When the game state changes (e.g., a player takes an action that affects the conditions), it notifies all registered observers. 
+        //      Effects waiting for specific conditions can then react accordingly when they receive the notification.
+
+        // 2. **Counter Attack System:**
+        //    - **Best Suited Pattern**: Pub-Sub Pattern
+        //    - **Explanation**: The Pub-Sub pattern is well-suited for implementing a counter-attack system because it allows for decoupling between the initiator of the attack (the attacker)
+        //      and the potential responders (the defenders). The attacker can publish an attack event to which potential defenders subscribe. 
+        //      This asynchronous communication allows for flexibility in how the defenders respond.
+        //    - **Implementation**: When a player initiates an attack, the attack event is published to a central event bus. 
+        //      Players who are eligible to counter-attack can subscribe to this event. 
+        //      If a player decides to counter-attack, they can then publish their counter-attack event to which the original attacker and other relevant players can subscribe.
+
+        // In summary, the Observer pattern is best suited for effects waiting for certain conditions because it establishes a direct relationship between the effects and the game state. 
+        // On the other hand, the Pub-Sub pattern is best suited for the counter-attack system because it allows for asynchronous communication between the attacker and potential defenders, 
+        // promoting loose coupling and flexibility in how players respond to attacks.
     }
+
 }

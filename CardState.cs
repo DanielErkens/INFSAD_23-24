@@ -56,9 +56,15 @@ public class InHand : CardState {
             case SpellCard:
                 SpellCard spell = card as SpellCard;
                 if(card.Owner.payEnergy(spell.CardColor, spell.Cost)) {
-                    card.CardState = new InPlay(this.card);
                     if(card.ActivationEffect != null) {
                         card.ActivationEffect.checkActivationCondition();
+                    }
+
+                    if (spell.CardType == CardType.Instantaneous) {
+                        spell.CardState = new InDiscard(card);
+                    }
+                    else {
+                        card.CardState = new InPlay(this.card);
                     }
                     return true;
                 }
