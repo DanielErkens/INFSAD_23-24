@@ -22,43 +22,43 @@ public class Program {
 
         // Deck
         for (int i=0; i<30; i++) {
-            gameState.Player1.Deck.Add(CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.White, null, null, cost: 1));
+            gameState.Player1.Deck.Add(CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1));
         }
 
         // 2 Blue lands
-        temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Blue, null, null);
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.Blue, null, null);
         temp.CardState = new InHand(temp);
         gameState.Player1.Hand.Add(temp);
 
-        temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Blue, null, null);
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.Blue, null, null);
         temp.CardState = new InHand(temp);
         gameState.Player1.Hand.Add(temp);
 
         // 1 green land
-        temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.Green, null, null);
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.Green, null, null);
         temp.CardState = new InHand(temp);
         gameState.Player1.Hand.Add(temp);
 
         // 1 blue creature
-        temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.creature, CardColor.Blue, null, null, cost: 2, attack: 2, defence: 2);
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.creature, CardColor.Blue, null, null, cost: 2, attack: 2, defence: 2);
         temp.CardState = new InHand(temp);
         temp.ActivationEffect = new CreatureEffect(gameState.CurrentTurn, temp, false, 0, Target.Other);
         gameState.Player1.Hand.Add(temp);
 
         // 1 green spell
-        temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Green, null, null, cost: 1);
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Green, null, null, cost: 1);
         temp.CardState = new InHand(temp);
         temp.ActivationEffect = new buffCreature(gameState.CurrentTurn, temp, false, 1, Target.Self);
         gameState.Player1.Hand.Add(temp);
 
         // 1 blue instant counter
-        temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.spell, CardColor.Blue, null, null, cost: 1);
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Blue, null, null, cost: 1);
         temp.CardState = new InHand(temp);
         temp.ActivationEffect = new counterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
         gameState.Player1.Hand.Add(temp);
 
         // Filler cards
-        temp = CardFactory.Instance.createCard(gameState.Player1, CardPlaceHolder.land, CardColor.White, null, null, cost: 1);
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1);
         temp.CardState = new InHand(temp);
         gameState.Player1.Hand.Add(temp);
 
@@ -68,22 +68,22 @@ public class Program {
 
         // Deck
         for (int i=0; i<30; i++) {
-            gameState.Player2.Deck.Add(CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.White, null, null, cost: 1));
+            gameState.Player2.Deck.Add(CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.White, null, null, cost: 1));
         }
 
         // 1 red land
-        temp = CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.Red, null, null);
+        temp = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.Red, null, null);
         temp.CardState = new InHand(temp);
         gameState.Player2.Hand.Add(temp);
 
         // 1 red instant counter
-        temp = CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.spell, CardColor.Red, null, null, cost: 1);
+        temp = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.spell, CardColor.Red, null, null, cost: 1);
         temp.CardState = new InHand(temp);
         temp.ActivationEffect = new counterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
         gameState.Player2.Hand.Add(temp);
 
         for (int i=0; i<6; i++) {
-            Card temphand = CardFactory.Instance.createCard(gameState.Player2, CardPlaceHolder.land, CardColor.White, null, null, cost: 1);
+            Card temphand = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.White, null, null, cost: 1);
             temphand.CardState = new InHand(temphand);
             gameState.Player2.Hand.Add(temphand);
         }

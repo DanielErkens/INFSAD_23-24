@@ -18,13 +18,13 @@ public class CardFactory {
         }
     }
 
-    public Card createCard(Player owner, CardPlaceHolder type, CardColor color, CardEffect? activationEffect, CardEffect[]? effects, CardType cardType = CardType.Instantaneous, int cost = 0, int attack = 0, int defence = 0) {
+    public Card createCard(Player owner, TypeOfCard type, CardColor color, CardEffect? activationEffect, CardEffect[]? effects, CardType cardType = CardType.Instantaneous, int cost = 0, int attack = 0, int defence = 0) {
         switch(type) {
-            case CardPlaceHolder.land:
+            case TypeOfCard.land:
                 return new LandCard(owner, color.ToString() + "_" + type.ToString(), color, CardType.Permanent, activationEffect, effects);
-            case CardPlaceHolder.spell:
+            case TypeOfCard.spell:
                 return new SpellCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects, cost);
-            case CardPlaceHolder.creature:
+            case TypeOfCard.creature:
                 return new CreatureCard(owner, color.ToString() + "_" + type.ToString(), color, CardType.Permanent, activationEffect, effects, cost, attack >= 0 ? attack : 0, defence > 0 ? defence : 1);
             default:
             //  Throw an exception
@@ -33,7 +33,7 @@ public class CardFactory {
     }
 }
 
-public enum CardPlaceHolder {
+public enum TypeOfCard {
     land,
     spell,
     creature
