@@ -39,6 +39,12 @@ public class Player
         Deck.RemoveAt(0);
     }
 
+    public void resetLands() {
+        foreach(Card card in Permanents) {
+            card.reset();
+        }
+    }
+
     public void playCard() {
         Card CardToPlay = Hand.First();
 

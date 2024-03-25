@@ -29,13 +29,15 @@ public class PreparationState : ITurnState {
         GameState.getInstance().Player2.Energy.Add(CardColor.White, 0);
 
         // reset lands
-        foreach(Card card in GameState.getInstance().Player1.Permanents) {
-            card.reset();
-        }
+        GameState.getInstance().Player1.resetLands();
+        GameState.getInstance().Player2.resetLands();
+        // foreach(Card card in GameState.getInstance().Player1.Permanents) {
+        //     card.reset();
+        // }
 
-        foreach(Card card in GameState.getInstance().Player2.Permanents) {
-            card.reset();
-        }
+        // foreach(Card card in GameState.getInstance().Player2.Permanents) {
+        //     card.reset();
+        // }
 
         // UpdateCardEffectIsActive();
     
