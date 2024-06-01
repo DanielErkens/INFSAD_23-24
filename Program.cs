@@ -48,13 +48,13 @@ public class Program {
         // 1 green spell
         temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Green, null, null, cost: 1);
         temp.CardState = new InHand(temp);
-        temp.ActivationEffect = new buffCreature(gameState.CurrentTurn, temp, false, 1, Target.Self);
+        temp.ActivationEffect = new BuffCreature(gameState.CurrentTurn, temp, false, 1, Target.Self);
         gameState.Player1.Hand.Add(temp);
 
         // 1 blue instant counter
         temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Blue, null, null, cost: 1);
         temp.CardState = new InHand(temp);
-        temp.ActivationEffect = new counterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
+        temp.ActivationEffect = new CounterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
         gameState.Player1.Hand.Add(temp);
 
         // Filler cards
@@ -79,7 +79,7 @@ public class Program {
         // 1 red instant counter
         temp = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.spell, CardColor.Red, null, null, cost: 1);
         temp.CardState = new InHand(temp);
-        temp.ActivationEffect = new counterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
+        temp.ActivationEffect = new CounterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
         gameState.Player2.Hand.Add(temp);
 
         for (int i=0; i<6; i++) {

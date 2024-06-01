@@ -26,6 +26,8 @@ public class CardFactory {
                 return new SpellCard(owner, color.ToString() + "_" + type.ToString(), color, cardType, activationEffect, effects, cost);
             case TypeOfCard.creature:
                 return new CreatureCard(owner, color.ToString() + "_" + type.ToString(), color, CardType.Permanent, activationEffect, effects, cost, attack >= 0 ? attack : 0, defence > 0 ? defence : 1);
+            case TypeOfCard.artefact:
+                return new ArtefactCard(owner, color.ToString() + "_" + type.ToString(), activationEffect, effects, cost);
             default:
             //  Throw an exception
                 throw new ArgumentException("Unknown card type: " + type);
@@ -36,7 +38,8 @@ public class CardFactory {
 public enum TypeOfCard {
     land,
     spell,
-    creature
+    creature,
+    artefact,
 }
 
 public enum CardColor
@@ -46,6 +49,7 @@ public enum CardColor
     Brown,
     White,
     Green,
+    Colourless
 }
 
 public enum CardType 
@@ -110,6 +114,28 @@ public class SpellCard : Card
 {
     public int Cost { get; protected set; }
     public SpellCard(Player owner, string name, CardColor cardColor, CardType cardType, CardEffect? activationEffect, CardEffect[]? effects, int cost) : base(owner, name, cardColor, cardType, activationEffect, effects) 
+    {
+        Cost = cost;
+    }
+    
+    public override bool activate()
+    {
+        return this.CardState.useCard();
+    }
+    public override bool reset() {
+        return CardState.reset();
+    }
+
+    public override bool discard()
+    {
+        return this.CardState.discard();
+    }
+}
+
+public class ArtefactCard : Card
+{
+    public int Cost { get; protected set; }
+    public ArtefactCard(Player owner, string name, CardEffect? activationEffect, CardEffect[]? effects, int cost) : base(owner, name, CardColor.Colourless, CardType.Permanent, activationEffect, effects) 
     {
         Cost = cost;
     }

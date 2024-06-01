@@ -8,24 +8,26 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Moesab\\.nuget\\packages\\": {}
+    "C:\\Users\\dcerk\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\INFSAD_23-24.csproj",
+      "projectUniqueName": "c:\\Files\\Analyse\\INFSAD_23-24\\INFSAD_23-24.csproj",
       "projectName": "INFSAD_23-24",
-      "projectPath": "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\INFSAD_23-24.csproj",
-      "packagesPath": "C:\\Users\\Moesab\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Moesab\\Documents\\Hogeschool Rotterdam jaar 3\\ANL7\\Practicum\\Card game\\INFSAD_23-24\\obj\\",
+      "projectPath": "c:\\Files\\Analyse\\INFSAD_23-24\\INFSAD_23-24.csproj",
+      "packagesPath": "C:\\Users\\dcerk\\.nuget\\packages\\",
+      "outputPath": "c:\\Files\\Analyse\\INFSAD_23-24\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Moesab\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\dcerk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

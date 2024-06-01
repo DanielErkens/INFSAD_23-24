@@ -81,6 +81,7 @@ public class Player
 
             if (card is CreatureCard) {
                 CreatureCard temp = card as CreatureCard;
+
                 temp.attack();
                 break;
             }
@@ -89,7 +90,14 @@ public class Player
     }
 
     public bool payEnergy(CardColor color, int cost) {
-        if( Energy[color] >= cost ) {
+        if ( color == CardColor.Colourless && Energy.Values.Sum() > cost) {
+            // assumes only amount of lands needed are turned
+            foreach (var Key in Energy.Keys) {
+                Energy[Key] = 0;
+            }
+            return true;
+        }
+        else if( Energy[color] >= cost ) {
             Energy[color] -= cost;
             return true;
         }
@@ -125,7 +133,6 @@ public class Player
 
 
     public void takeDamage(int damage) {
-
         for(int i = Permanents.Count - 1; i >= 0; i--) {
             Card card = Permanents[i];
 

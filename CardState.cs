@@ -73,6 +73,24 @@ public class InHand : CardState {
                 }
                 break;
 
+            case ArtefactCard:
+                ArtefactCard artefact = card as ArtefactCard;
+                // payment needs to accept any color
+                if(card.Owner.payEnergy(artefact.CardColor, artefact.Cost)) {
+                    
+                    foreach(CardEffect eff in card.Effects){
+                        eff.checkActivationCondition();
+                    }
+
+                    card.CardState = new InPlay(this.card);
+
+                    return true;
+                }
+                else {
+                    Console.WriteLine("Unable to play. you're broke");
+                }
+                break;
+
             case CreatureCard:
                 CreatureCard creature = card as CreatureCard;
                 if(card.Owner.payEnergy(creature.CardColor, creature.Cost)) {
@@ -110,7 +128,9 @@ public class InPlay : CardState {
         switch(card)
         {
             case LandCard:
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 LandCard land = card as LandCard;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
                 if (!land.turned) {
                     land.Owner.Energy[land.CardColor] +=1;
@@ -133,11 +153,15 @@ public class InPlay : CardState {
 
                 return true;
 
+            case ArtefactCard:
+                ArtefactCard artefact = card as ArtefactCard;
+                return true;
+
             case CreatureCard:
             
                 CreatureCard creature = card as CreatureCard;
 
-                GameState.getInstance().Counters.Push( new attackEffect( GameState.getInstance().CurrentTurn, this.card, false, 0 ) );
+                GameState.getInstance().Counters.Push( new AttackEffect( GameState.getInstance().CurrentTurn, this.card, false, 0 ) );
 
                 return true;
 

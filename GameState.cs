@@ -14,7 +14,7 @@ public class GameState {
     public event attackHandler counterHandler;
 
     // board effects are not part of the assignment 
-    // public Stack<CardEffect> Effects { get; set; }
+    public List<CardEffect> Effects { get; set; }
     public Stack<CardEffect> Counters { get; set; }
 
     private GameState(ITurnState turnState, Player player1, Player player2, int currentTurn, Stack<CardEffect> effects, Stack<CardEffect> counters) {
@@ -51,18 +51,18 @@ public class GameState {
         return players;
     }
 
-    // public Stack<CardEffect> getEffects() {
+    // public ArtefactCard[] getEffects() {
     //     return Effects;
     // }
 
-    // public void addEffects(CardEffect cardEffect) {
+    // public void addEffects(ArtefactCard cardEffect) {
     //     Effects.Push(cardEffect);
     // }
 
-    // public void deleteEffect(CardEffect cardEffect) {
-    //     List<CardEffect> temp = new List<CardEffect>(Effects);
+    // public void deleteEffect(ArtefactCard cardEffect) {
+    //     List<ArtefactCard> temp = new List<ArtefactCard>(Effects);
     //     temp.Remove(cardEffect);
-    //     Effects = new Stack<CardEffect>(temp);
+    //     Effects = new Stack<ArtefactCard>(temp);
     // }
 
     public void nextTurnState() {

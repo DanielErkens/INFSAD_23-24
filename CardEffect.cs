@@ -13,17 +13,17 @@ public abstract class CardEffect {
     public string ActivationDescription { get; protected set; }
     public int TurnPlayed { get; protected set; }
 
-    public Card Owner { get; protected set; }
+    public Card BaseCard { get; protected set; }
     public bool IsActive;
     public int TurnsActive { get; protected set; }
     public Target Target { get; protected set; }
     public GameState GameState { get; protected set; }
 
-    protected CardEffect(string name, string activationDescription, int turnPlayed, Card owner, bool isActive, int turnsActive, Target target) {
+    protected CardEffect(string name, string activationDescription, int turnPlayed, Card baseCard, bool isActive, int turnsActive, Target target) {
         Name = name;
         ActivationDescription = activationDescription;
         TurnPlayed = turnPlayed;
-        Owner = owner;
+        BaseCard = baseCard;
         IsActive = isActive;
         TurnsActive = turnsActive;
         Target = target;
@@ -34,29 +34,34 @@ public abstract class CardEffect {
     public abstract void checkActivationCondition();
 }
 
-public class attackEffect : CardEffect {
-    public attackEffect(int turnPlayed, Card owner, bool isActive, int turnsActive, Target target = Target.Other) : base("Attack", "attacks opponent", turnPlayed, owner, isActive, 1, Target.Other) {
+public class AttackEffect : CardEffect {
+    public AttackEffect(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target = Target.Other) : base("Attack", "attacks opponent", turnPlayed, BaseCard, isActive, 1, Target.Other) {
 
     }
 
     public override void applyEffect()
     {
         int opponent = GameState.getInstance().CurrentTurn%2 == 0 ? 1 : 0;
-        CreatureCard creature = Owner as CreatureCard;
-        GameState.getInstance().Players[opponent].takeDamage(creature.Attack);
+        CreatureCard creature = BaseCard as CreatureCard;
+        int actualAttack = creature.Attack;
+        if(GameState.Effects.Any(effect => effect is HalfDamageEffect)) {
+            actualAttack = (creature.Attack + 1) / 2;
+        }
+        
+        GameState.getInstance().Players[opponent].takeDamage(actualAttack);
     }
 
     public override void checkActivationCondition()
     {
-        if (Owner is CreatureCard) {
+        if (BaseCard is CreatureCard) {
             GameState.getInstance().Counters.Push(this);
         }
     }
 }
 
 
-public class counterSpell : CardEffect {
-    public counterSpell(int turnPlayed, Card owner, bool isActive, int turnsActive, Target target) : base("Counter", "Removes last opponent action", turnPlayed, owner, isActive, turnsActive, target) {
+public class CounterSpell : CardEffect {
+    public CounterSpell(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target) : base("Counter", "Removes last opponent action", turnPlayed, BaseCard, isActive, turnsActive, target) {
 
     }
 
@@ -74,13 +79,13 @@ public class counterSpell : CardEffect {
 }
 
 
-public class buffCreature : CardEffect {
-    public buffCreature(int turnPlayed, Card owner, bool isActive, int turnsActive, Target target) : base("+3 Creature buff", "Buffs creature", turnPlayed, owner, isActive, turnsActive, target) {
+public class BuffCreature : CardEffect {
+    public BuffCreature(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target) : base("+3 Creature buff", "Buffs creature", turnPlayed, BaseCard, isActive, turnsActive, target) {
 
     }
 
     public override void applyEffect() {
-        foreach(Card card in Owner.Owner.Permanents) {
+        foreach(Card card in BaseCard.Owner.Permanents) {
             if (card is CreatureCard) {
                 CreatureCard temp = card as CreatureCard;
                 temp.increaseAttack(3);
@@ -98,13 +103,13 @@ public class buffCreature : CardEffect {
 }
 
 public class CreatureEffect : CardEffect{
-    public CreatureEffect(int turnPlayed, Card owner, bool isActive, int turnsActive, Target target) : base("Card remover", "removes a card", turnPlayed, owner, isActive, turnsActive, target) {
+    public CreatureEffect(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target) : base("Card remover", "removes a card", turnPlayed, BaseCard, isActive, turnsActive, target) {
 
     }
 
     public override void applyEffect()
     {
-        Player Victim = Owner.Owner == GameState.getInstance().Player1 ? GameState.getInstance().Player2 : GameState.getInstance().Player1;  
+        Player Victim = BaseCard.Owner == GameState.getInstance().Player1 ? GameState.getInstance().Player2 : GameState.getInstance().Player1;  
 
         Victim.discardCard();        
     }
@@ -115,6 +120,49 @@ public class CreatureEffect : CardEffect{
 
         GameState.getInstance().Counters.Push(this);
 
+    }
+
+}
+
+public class DefenselessEffect : CardEffect{
+    public DefenselessEffect(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target = Target.both) : base("No defenses", "defense on creatures is ignored", turnPlayed, BaseCard, isActive, turnsActive, target) {
+        
+    }
+    
+    public override void applyEffect() {
+        return;
+    }
+    
+    public override void checkActivationCondition() {
+        GameState.getInstance().Effects.Add(this);
+    }
+
+}
+
+public class HalfDamageEffect : CardEffect{
+    public HalfDamageEffect(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target) : base("half damage half fun", "deal and take half damage", turnPlayed, BaseCard, isActive, turnsActive, target) {
+
+    }
+    public override void applyEffect() {
+        return;
+    }
+    
+    public override void checkActivationCondition() {
+        GameState.getInstance().Effects.Add(this);
+    }
+
+}
+public class SkipDrawEffect : CardEffect{
+
+    public SkipDrawEffect(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target) : base("skip drawing", "opponent skips drawing phase", turnPlayed, BaseCard, isActive, turnsActive, target) {
+
+    }
+    public override void applyEffect() {
+        GameState.getInstance().Effects.Remove(this);
+    }
+    
+    public override void checkActivationCondition() {
+        GameState.getInstance().Effects.Add(this);
     }
 
 }

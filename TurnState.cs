@@ -40,7 +40,9 @@ public class PreparationState : ITurnState {
         // }
 
         // UpdateCardEffectIsActive();
-    
+
+        //TODO: Check for artifact effects
+
         GameState.getInstance().TurnState = new DrawingState();
 
     }
@@ -60,6 +62,14 @@ public class DrawingState : ITurnState {
         // System.Console.WriteLine("inside drawing phase");
         
         // UpdateCardEffectIsActive();
+        CardEffect skipdraw = GameState.getInstance().Effects.OfType<SkipDrawEffect>().FirstOrDefault();
+        if(skipdraw != null) {
+            Player currentPlayer = GameState.getInstance().Players[(GameState.getInstance().CurrentTurn + 1) % 2];
+            if (skipdraw.BaseCard.Owner != currentPlayer) {
+                Console.WriteLine("Artefact effect in play. Skipping drawing phase");
+                GameState.getInstance().Effects.Remove(skipdraw);
+            }
+        }
 
         GameState.getInstance().TurnState = GameState.getInstance().Players[GameState.getInstance().CurrentTurn % 2].Deck.Count <= 0 ? new GameOverState() : new MainState();
 
