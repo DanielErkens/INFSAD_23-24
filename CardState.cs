@@ -56,6 +56,7 @@ public class InHand : CardState {
             case SpellCard:
                 SpellCard spell = card as SpellCard;
                 if(card.Owner.payEnergy(spell.CardColor, spell.Cost)) {
+                    // effect array is never checked for spells
                     if(card.ActivationEffect != null) {
                         card.ActivationEffect.checkActivationCondition();
                     }
@@ -78,6 +79,7 @@ public class InHand : CardState {
                 // payment needs to accept any color
                 if(card.Owner.payEnergy(artefact.CardColor, artefact.Cost)) {
                     
+                    // activation effect is never checked for artefacts
                     foreach(CardEffect eff in card.Effects){
                         eff.checkActivationCondition();
                     }

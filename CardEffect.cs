@@ -154,15 +154,16 @@ public class HalfDamageEffect : CardEffect{
 }
 public class SkipDrawEffect : CardEffect{
 
-    public SkipDrawEffect(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target) : base("skip drawing", "opponent skips drawing phase", turnPlayed, BaseCard, isActive= true, turnsActive, target) {
+    public SkipDrawEffect(int turnPlayed, Card BaseCard, bool isActive, int turnsActive, Target target) : base("skip drawing", "opponent skips drawing phase", turnPlayed, BaseCard, isActive, turnsActive, target) {
 
     }
     
     public override void applyEffect() {
-        if( this.IsActive == false ) {
+        if( this.TurnsActive < 1 ) {
             GameState.getInstance().Effects.Remove(this);
+            return;
         }
-        this.IsActive = false;
+        this.TurnsActive--;
         return;
     }
     

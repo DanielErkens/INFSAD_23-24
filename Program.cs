@@ -53,17 +53,20 @@ public class Program {
         temp.ActivationEffect = new BuffCreature(gameState.CurrentTurn, temp, false, 1, Target.Self);
         gameState.Player1.Hand.Add(temp);
 
-        // // 1 blue instant counter
-        // temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Blue, null, null, cost: 1);
-        // temp.CardState = new InHand(temp);
-        // temp.ActivationEffect = new CounterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
-        // gameState.Player1.Hand.Add(temp);
+        // 1 blue instant counter
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Blue, null, null, cost: 1);
+        temp.CardState = new InHand(temp);
+        temp.ActivationEffect = new CounterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
+        gameState.Player1.Hand.Add(temp);
 
-        // // Filler cards
-        // temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1);
-        // temp.CardState = new InHand(temp);
-        // gameState.Player1.Hand.Add(temp);
+        // Filler cards
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1);
+        temp.CardState = new InHand(temp);
+        gameState.Player1.Hand.Add(temp);
 
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1);
+        temp.CardState = new InHand(temp);
+        gameState.Player1.Hand.Add(temp);
 
 
         // Bryce
@@ -73,9 +76,30 @@ public class Program {
             gameState.Player2.Deck.Add(CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.White, null, null, cost: 1));
         }
 
-        // 1 red land
+        // 4 red lands
         temp = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.Red, null, null);
         temp.CardState = new InHand(temp);
+        gameState.Player2.Hand.Add(temp);
+
+        temp = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.Red, null, null);
+        temp.CardState = new InHand(temp);
+        gameState.Player2.Hand.Add(temp);
+
+        temp = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.Red, null, null);
+        temp.CardState = new InHand(temp);
+        gameState.Player2.Hand.Add(temp);
+
+        temp = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.Red, null, null);
+        temp.CardState = new InHand(temp);
+        gameState.Player2.Hand.Add(temp);
+
+        // 1 artefact skipdraw + halfdamage
+        temp = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.artefact, CardColor.Colourless, null, null, CardType.Permanent, 2);
+        temp.CardState = new InHand(temp);
+        temp.Effects = new CardEffect[] {
+            new SkipDrawEffect(gameState.CurrentTurn, temp, false, 1, Target.Other), 
+            new HalfDamageEffect(gameState.CurrentTurn, temp, false, 0, Target.both)
+        };
         gameState.Player2.Hand.Add(temp);
 
         // 1 red instant counter
@@ -84,7 +108,7 @@ public class Program {
         temp.ActivationEffect = new CounterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
         gameState.Player2.Hand.Add(temp);
 
-        for (int i=0; i<6; i++) {
+        for (int i=0; i<2; i++) {
             Card temphand = CardFactory.Instance.createCard(gameState.Player2, TypeOfCard.land, CardColor.White, null, null, cost: 1);
             temphand.CardState = new InHand(temphand);
             gameState.Player2.Hand.Add(temphand);
