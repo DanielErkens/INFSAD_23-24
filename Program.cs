@@ -25,6 +25,8 @@ public class Program {
             gameState.Player1.Deck.Add(CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1));
         }
 
+        
+
         // 2 Blue lands
         temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.Blue, null, null);
         temp.CardState = new InHand(temp);
@@ -51,16 +53,16 @@ public class Program {
         temp.ActivationEffect = new BuffCreature(gameState.CurrentTurn, temp, false, 1, Target.Self);
         gameState.Player1.Hand.Add(temp);
 
-        // 1 blue instant counter
-        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Blue, null, null, cost: 1);
-        temp.CardState = new InHand(temp);
-        temp.ActivationEffect = new CounterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
-        gameState.Player1.Hand.Add(temp);
+        // // 1 blue instant counter
+        // temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Blue, null, null, cost: 1);
+        // temp.CardState = new InHand(temp);
+        // temp.ActivationEffect = new CounterSpell(gameState.CurrentTurn, temp, false, 1, Target.both);
+        // gameState.Player1.Hand.Add(temp);
 
-        // Filler cards
-        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1);
-        temp.CardState = new InHand(temp);
-        gameState.Player1.Hand.Add(temp);
+        // // Filler cards
+        // temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1);
+        // temp.CardState = new InHand(temp);
+        // gameState.Player1.Hand.Add(temp);
 
 
 

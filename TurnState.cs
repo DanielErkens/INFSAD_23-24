@@ -67,7 +67,9 @@ public class DrawingState : ITurnState {
             Player currentPlayer = GameState.getInstance().Players[(GameState.getInstance().CurrentTurn + 1) % 2];
             if (skipdraw.BaseCard.Owner != currentPlayer) {
                 Console.WriteLine("Artefact effect in play. Skipping drawing phase");
-                GameState.getInstance().Effects.Remove(skipdraw);
+                skipdraw.applyEffect();
+                // effect is removed in effect itself
+                // GameState.getInstance().Effects.Remove(skipdraw);
             }
         }
 
