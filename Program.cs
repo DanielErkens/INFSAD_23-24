@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 public class Program {
 
@@ -64,9 +65,6 @@ public class Program {
         temp.CardState = new InHand(temp);
         gameState.Player1.Hand.Add(temp);
 
-        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.land, CardColor.White, null, null, cost: 1);
-        temp.CardState = new InHand(temp);
-        gameState.Player1.Hand.Add(temp);
 
 
         // Bryce
@@ -114,6 +112,7 @@ public class Program {
             gameState.Player2.Hand.Add(temphand);
         }
     }
+
 
     public static void play_turns() {
         // some notes
@@ -164,7 +163,10 @@ public class Program {
         gameState.nextTurnState();
         // Play 1 land {red}
         CurrentPlayer().playCard();
-        Console.WriteLine($"{CurrentPlayer().Name} plays a red land");
+        CurrentPlayer().playCard();
+        CurrentPlayer().playCard();
+        CurrentPlayer().playCard();
+        Console.WriteLine($"{CurrentPlayer().Name} plays 4 red lands");
         Console.WriteLine($"{CurrentPlayer().Name} has {CurrentPlayer().Hand.Count} cards in hand");
         // main/ attack phase -> ending phase
         gameState.nextTurnState();
@@ -225,10 +227,11 @@ public class Program {
         Console.WriteLine($"{CurrentPlayer().Name} has {CurrentPlayer().Hand.Count} cards in hand and {CurrentPlayer().Deck.Count} cards in deck");
         // drawing phase -> main/ attack phase
         gameState.nextTurnState();
-        Console.WriteLine($"{CurrentPlayer().Name} doesn't play any cards");
+        // Console.WriteLine($"{CurrentPlayer().Name} doesn't play any cards");
+        CurrentPlayer().useLand(CardColor.Red, 2);
+        CurrentPlayer().playCard();
         // main/ attack phase -> ending phase
         gameState.nextTurnState();
-        Console.WriteLine($"{CurrentPlayer().Name} doesn't attack this turn");
         Console.WriteLine($"{CurrentPlayer().Name} ends turn");
         Console.WriteLine($"End situation: {CurrentPlayer().Name} has {CurrentPlayer().Hand.Count} cards in hand and {CurrentPlayer().Deck.Count} cards in deck");
         Console.WriteLine($"{CurrentPlayer().Name} has {CurrentPlayer().Lives} lifes left and has {CurrentPlayer().Permanents.Count} permanents in play");
@@ -236,20 +239,17 @@ public class Program {
         Console.WriteLine();
         // ending phase -> preperation pahse
         gameState.nextTurnState();
-        
-
+    
 
         // Turn 3
+
+        // Arold
         Console.WriteLine("-------------------------------------------------");
         Console.WriteLine($"Turn 3: {CurrentPlayer().Name}");
-        // preparation phase -> drawing phase
+        // preparation phase -> drawing phase (skip) -> main/ attack phase
         gameState.nextTurnState(); 
-        // Get card from deck
-        CurrentPlayer().getCardFromDeck();
-        Console.WriteLine($"{CurrentPlayer().Name} draws a card");
+        // Get card from deck (unable cuz artefact effect)
         Console.WriteLine($"{CurrentPlayer().Name} has {CurrentPlayer().Hand.Count} cards in hand and {CurrentPlayer().Deck.Count} cards in deck");
-        // drawing phase -> main/ attack phase
-        gameState.nextTurnState(); 
         // Play attack creature (blue)
         CurrentPlayer().useCreature();
         Console.WriteLine($"{CurrentPlayer().Name} attacks with the 2/2 creature");
@@ -286,6 +286,18 @@ public class Program {
 
         // ending phase -> preperation pahse
         gameState.nextTurnState();
+
+        // Bryce
+        Console.WriteLine("-------------------------------------------------");
+        Console.WriteLine($"Turn 3: {CurrentPlayer().Name}");
+        // preparation phase -> drawing phase
+        gameState.nextTurnState(); 
+        // Get card from deck
+        CurrentPlayer().getCardFromDeck();
+        Console.WriteLine($"{CurrentPlayer().Name} draws a card");
+        Console.WriteLine($"{CurrentPlayer().Name} has {CurrentPlayer().Hand.Count} cards in hand and {CurrentPlayer().Deck.Count} cards in deck");
+
+        // ending
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine($"End situation {GameState.getInstance().Players[0].Name}:");
@@ -297,7 +309,7 @@ public class Program {
 
         Console.WriteLine($"End situation {GameState.getInstance().Players[1].Name}:");
         Console.WriteLine($"{GameState.getInstance().Players[1].Name} has {GameState.getInstance().Players[1].Hand.Count} cards in hand and {GameState.getInstance().Players[1].Deck.Count} cards in deck");
-        Console.WriteLine($"{GameState.getInstance().Players[1].Name} has {GameState.getInstance().Players[1].Lives} lifes left and has {GameState.getInstance().Players[1].Permanents.Count} permanents in play");
+        Console.WriteLine($"{GameState.getInstance().Players[1].Name} has {GameState.getInstance().Players[1].Lives} lifes left and has {GameState.getInstance().Players[1].Permanents.Count} permanents including 1 artefact in play");
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine("-------------------------------------------------");

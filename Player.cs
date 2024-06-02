@@ -90,14 +90,14 @@ public class Player
     }
 
     public bool payEnergy(CardColor color, int cost) {
-        if ( color == CardColor.Colourless && Energy.Values.Sum() > cost) {
+        if ( color == CardColor.Colourless && Energy.Values.Sum() >= cost) {
             // assumes only amount of lands needed are turned
             foreach (var Key in Energy.Keys) {
                 Energy[Key] = 0;
             }
             return true;
         }
-        else if( Energy[color] >= cost ) {
+        else if( color != CardColor.Colourless && Energy[color] >= cost ) {
             Energy[color] -= cost;
             return true;
         }

@@ -42,9 +42,21 @@ public class PreparationState : ITurnState {
         // UpdateCardEffectIsActive();
 
         //TODO: Check for artifact effects
-
-        GameState.getInstance().TurnState = new DrawingState();
-
+        var skipdraw = GameState.getInstance().Effects.OfType<SkipDrawEffect>().FirstOrDefault();
+        if(skipdraw != null) {
+            Player currentPlayer = GameState.getInstance().Players[GameState.getInstance().CurrentTurn % 2];
+            if (skipdraw.TurnsActive < 1) {
+                GameState.getInstance().Effects.Remove(skipdraw);
+            }
+            else if (skipdraw.BaseCard.Owner != currentPlayer) {
+                Console.WriteLine("Artefact effect in play. Skipping drawing phase");
+                skipdraw.applyEffect();
+                GameState.getInstance().TurnState = GameState.getInstance().Players[GameState.getInstance().CurrentTurn % 2].Deck.Count <= 0 ? new GameOverState() : new MainState();
+            }
+        }
+        else {
+            GameState.getInstance().TurnState = new DrawingState();
+        }
     }
 
     public void UpdateCardEffectIsActive() {
@@ -62,16 +74,6 @@ public class DrawingState : ITurnState {
         // System.Console.WriteLine("inside drawing phase");
         
         // UpdateCardEffectIsActive();
-        CardEffect skipdraw = GameState.getInstance().Effects.OfType<SkipDrawEffect>().FirstOrDefault();
-        if(skipdraw != null) {
-            Player currentPlayer = GameState.getInstance().Players[(GameState.getInstance().CurrentTurn + 1) % 2];
-            if (skipdraw.BaseCard.Owner != currentPlayer) {
-                Console.WriteLine("Artefact effect in play. Skipping drawing phase");
-                skipdraw.applyEffect();
-                // effect is removed in effect itself
-                // GameState.getInstance().Effects.Remove(skipdraw);
-            }
-        }
 
         GameState.getInstance().TurnState = GameState.getInstance().Players[GameState.getInstance().CurrentTurn % 2].Deck.Count <= 0 ? new GameOverState() : new MainState();
 

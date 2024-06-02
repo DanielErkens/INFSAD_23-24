@@ -17,14 +17,14 @@ public class GameState {
     public List<CardEffect> Effects { get; set; }
     public Stack<CardEffect> Counters { get; set; }
 
-    private GameState(ITurnState turnState, Player player1, Player player2, int currentTurn, Stack<CardEffect> effects, Stack<CardEffect> counters) {
+    private GameState(ITurnState turnState, Player player1, Player player2, int currentTurn, List<CardEffect> effects, Stack<CardEffect> counters) {
         TurnState = turnState;
         Player1 = player1;
         Player2 = player2;
 
         Players = new Player[] {player1, player2};
         CurrentTurn = currentTurn;
-        // Effects = effects;
+        Effects = effects;
         Counters = counters;
     }
 
@@ -38,7 +38,7 @@ public class GameState {
             Player Player1 = players[0];
             Player Player2 = players[1];
 
-            instance = new GameState(initialState, Player1, Player2, 0, new Stack<CardEffect>(), new Stack<CardEffect>());
+            instance = new GameState(initialState, Player1, Player2, 0, new List<CardEffect>(), new Stack<CardEffect>());
         }
         // Return the singleton instance
         return instance;
