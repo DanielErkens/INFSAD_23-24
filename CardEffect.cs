@@ -46,7 +46,7 @@ public class AttackEffect : CardEffect {
         int actualAttack = creature.Attack;
         if(GameState.Effects.Any(effect => effect is HalfDamageEffect)) {
             actualAttack = (creature.Attack + 1) / 2;
-            Console.WriteLine($"Half damage effect in play. damage reduced from {creature.Attack} to {actualAttack}");
+            Console.WriteLine($"Half damage effect in play thanks to the artifacts effect. Creatures damage reduced from {creature.Attack} to {actualAttack}");
         }
         
         GameState.getInstance().Players[opponent].takeDamage(actualAttack);
@@ -166,7 +166,7 @@ public class SkipDrawEffect : CardEffect{
     public override void applyEffect() {
         if( this.TurnsActive < 1 ) {
             GameState.getInstance().Effects.Remove(this);
-            Console.WriteLine($"skipdraw effect has been played. skip drawing phase effect is removed");     //Check
+            Console.WriteLine($"Skipdraw effect from the artefact already has been played. Skip drawing phase effect is removed from artefact");     //Check
 
             return;
         }

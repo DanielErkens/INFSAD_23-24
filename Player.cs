@@ -153,8 +153,9 @@ public class Player
             }
 
         }
-
+        Console.WriteLine($"{Name} took {damage} damage");
         Lives -= damage;
+        Console.WriteLine($"{Name} has {Lives} lives");
     }
 
     public void discardCard() {
