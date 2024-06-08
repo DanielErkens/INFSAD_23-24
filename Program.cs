@@ -49,7 +49,7 @@ public class Program {
         gameState.Player1.Hand.Add(temp);
 
         // 1 green spell
-        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Green, null, null, cost: 1);
+        temp = CardFactory.Instance.createCard(gameState.Player1, TypeOfCard.spell, CardColor.Green, null, null, cost: 1); //Chose to make this 1 as we only have 4 lands, 2 of which are blue in turn 1, and 2 green in turn 3 is not possible
         temp.CardState = new InHand(temp);
         temp.ActivationEffect = new BuffCreature(gameState.CurrentTurn, temp, false, 1, Target.Self);
         gameState.Player1.Hand.Add(temp);
@@ -201,8 +201,8 @@ public class Program {
         Console.WriteLine($"{CurrentPlayer().Name} turns 2 blue lands");
         Console.WriteLine($"{CurrentPlayer().Name} has 2 blue energy");
         // Play Creature (blue)
-        CurrentPlayer().playCard();
         Console.WriteLine($"{CurrentPlayer().Name} pays 2 blue energy and plays a blue creature with 2/2");
+        CurrentPlayer().playCard();
         Console.WriteLine($"{CurrentPlayer().Name} has {CurrentPlayer().Energy[CardColor.Blue]} energy");
         // main/ attack phase -> ending phase
         gameState.nextTurnState();
@@ -229,6 +229,7 @@ public class Program {
         gameState.nextTurnState();
         // Console.WriteLine($"{CurrentPlayer().Name} doesn't play any cards");
         CurrentPlayer().useLand(CardColor.Red, 2);
+        Console.WriteLine($"{CurrentPlayer().Name} pays 2 red energy and plays an artifact");
         CurrentPlayer().playCard();
         // main/ attack phase -> ending phase
         gameState.nextTurnState();
@@ -301,7 +302,7 @@ public class Program {
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine($"End situation {GameState.getInstance().Players[0].Name}:");
-        Console.WriteLine($"{GameState.getInstance().Players[0].Name} deals 5 damage to Bryce with the 5/5 creature");
+        Console.WriteLine($"{GameState.getInstance().Players[0].Name} deals 3 damage to Bryce with the 5/5 creature");
         Console.WriteLine($"{GameState.getInstance().Players[0].Name} has {GameState.getInstance().Players[0].Hand.Count} cards in hand and {GameState.getInstance().Players[0].Deck.Count} cards in deck");
         Console.WriteLine($"{GameState.getInstance().Players[0].Name} has {GameState.getInstance().Players[0].Lives} lifes left and has {GameState.getInstance().Players[0].Permanents.Count} permanents in play");
         Console.WriteLine();

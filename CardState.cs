@@ -130,9 +130,7 @@ public class InPlay : CardState {
         switch(card)
         {
             case LandCard:
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 LandCard land = card as LandCard;
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
                 if (!land.turned) {
                     land.Owner.Energy[land.CardColor] +=1;

@@ -111,7 +111,7 @@ public class CreatureEffect : CardEffect{
     {
         Player Victim = BaseCard.Owner == GameState.getInstance().Player1 ? GameState.getInstance().Player2 : GameState.getInstance().Player1;  
 
-        Victim.discardCard();        
+        Victim.discardCard();   
     }
 
     public override void checkActivationCondition()
@@ -119,6 +119,8 @@ public class CreatureEffect : CardEffect{
         // Check if effect should still be active 
 
         GameState.getInstance().Counters.Push(this);
+        Player Victim = BaseCard.Owner == GameState.getInstance().Player1 ? GameState.getInstance().Player2 : GameState.getInstance().Player1;  
+        Console.WriteLine($"{Victim.Name} has discarded a card thanks to the effect of {BaseCard.Name}");     //Check
 
     }
 
@@ -161,6 +163,8 @@ public class SkipDrawEffect : CardEffect{
     public override void applyEffect() {
         if( this.TurnsActive < 1 ) {
             GameState.getInstance().Effects.Remove(this);
+            Console.WriteLine($"{BaseCard.Owner} effect has been played. skip drawing phase effect is removed");     //Check
+
             return;
         }
         this.TurnsActive--;
