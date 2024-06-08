@@ -365,6 +365,7 @@ public class Program {
     }
 
     public static void Main(String[] args) {
+        // phases to game
         init_board();
         init_decks();
         play_turns();
