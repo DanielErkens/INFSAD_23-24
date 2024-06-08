@@ -13,7 +13,7 @@ public class PreparationState : ITurnState {
     }
 
     public void PlayPhase() {
-        System.Console.WriteLine("Inside prep phase");
+        // System.Console.WriteLine("Inside prep phase");
 
         GameState.getInstance().Player1.Energy = new Dictionary<CardColor, int>();
         GameState.getInstance().Player1.Energy.Add(CardColor.Blue, 0);
@@ -29,8 +29,9 @@ public class PreparationState : ITurnState {
         GameState.getInstance().Player2.Energy.Add(CardColor.White, 0);
 
         // reset lands
-        GameState.getInstance().Player1.resetLands();
-        GameState.getInstance().Player2.resetLands();
+        // GameState.getInstance().Player1.resetLands();
+        // GameState.getInstance().Player2.resetLands();
+        GameState.getInstance().Players[GameState.getInstance().CurrentTurn % 2].resetLands();
         // foreach(Card card in GameState.getInstance().Player1.Permanents) {
         //     card.reset();
         // }
@@ -72,7 +73,7 @@ public class DrawingState : ITurnState {
     }
 
     public void PlayPhase() {
-        System.Console.WriteLine("Inside drawing phase");
+        // System.Console.WriteLine("Inside drawing phase");
         
         // UpdateCardEffectIsActive();
 
@@ -90,7 +91,7 @@ public class MainState : ITurnState { //Implement pub-sub here
     }
 
     public void PlayPhase() {
-        System.Console.WriteLine("Inside main phase");
+        // System.Console.WriteLine("Inside main phase");
 
         // UpdateCardEffectIsActive();
 
@@ -117,7 +118,7 @@ public class EndingState : ITurnState {
             resolve.applyEffect();
         }
 
-        System.Console.WriteLine("Inside ending phase");
+        // System.Console.WriteLine("Inside ending phase");
         if (GameState.getInstance().Player1.Hand.Count > 7)
             GameState.getInstance().Player1.trimCards();
 

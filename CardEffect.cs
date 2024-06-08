@@ -46,6 +46,7 @@ public class AttackEffect : CardEffect {
         int actualAttack = creature.Attack;
         if(GameState.Effects.Any(effect => effect is HalfDamageEffect)) {
             actualAttack = (creature.Attack + 1) / 2;
+            Console.WriteLine($"Half damage effect in play. damage reduced from {creature.Attack} to {actualAttack}");
         }
         
         GameState.getInstance().Players[opponent].takeDamage(actualAttack);
@@ -68,6 +69,7 @@ public class CounterSpell : CardEffect {
     public override void applyEffect()
     {
         GameState.getInstance().Counters.TryPop(out CardEffect result);
+        Console.WriteLine($"{BaseCard.CardColor.ToString()} counter spell played. {result.BaseCard.CardColor.ToString()} {result.Name} removed");
     }
 
     public override void checkActivationCondition()
@@ -146,6 +148,7 @@ public class HalfDamageEffect : CardEffect{
 
     }
     public override void applyEffect() {
+        Console.WriteLine("Half dammage effect in effect");
         return;
     }
     
@@ -163,7 +166,7 @@ public class SkipDrawEffect : CardEffect{
     public override void applyEffect() {
         if( this.TurnsActive < 1 ) {
             GameState.getInstance().Effects.Remove(this);
-            Console.WriteLine($"{BaseCard.Owner} effect has been played. skip drawing phase effect is removed");     //Check
+            Console.WriteLine($"skipdraw effect has been played. skip drawing phase effect is removed");     //Check
 
             return;
         }

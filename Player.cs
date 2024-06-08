@@ -40,9 +40,16 @@ public class Player
     }
 
     public void resetLands() {
+        int resetCount = 0;
         foreach(Card card in Permanents) {
+            if (card is LandCard) {
+                LandCard temp = card as LandCard;
+                if (temp.turned)
+                    resetCount++;
+            }
             card.reset();
         }
+        Console.WriteLine($"{Name} restored {resetCount} lands");
     }
 
     public void playCard() {
@@ -60,14 +67,13 @@ public class Player
     }
 
     public void useLand(CardColor color, int total) {
-        int current = 0;
         for(int i = Permanents.Count - 1; i >= 0; i--) {
             Card card = Permanents[i];
 
             if (card is LandCard) {
                 LandCard temp = card as LandCard;
-                if(temp.CardColor == color && current < total) {
-                    current +=1;
+                if(temp.CardColor == color && Energy[color] < total) {
+                    // Energy[color] +=1;
                     bool activated = temp.activate();
                 }
             }
