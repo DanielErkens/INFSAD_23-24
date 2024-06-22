@@ -128,7 +128,13 @@ public class EndingState : ITurnState {
         // UpdateCardEffectIsActive();
         
         GameState.getInstance().CurrentTurn += 1;
-        GameState.getInstance().TurnState = new PreparationState();
+        if(GameState.getInstance().Players[(GameState.getInstance().CurrentTurn+1) % 2].Deck.Count() > 0){
+            GameState.getInstance().TurnState = new PreparationState();
+        }
+        else {
+            GameState.getInstance().TurnState = new GameOverState();
+        }
+
     }
 
     // public void UpdateCardEffectIsActive() {}
